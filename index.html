@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>Circle | BMS Connect</title>
-  <!-- Google Fonts & simple styling -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
@@ -16,14 +16,63 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(145deg, #f8fafc 0%, #eef2f9 100%);
+      background: linear-gradient(135deg, #FFF2E6 0%, #FFE4E8 50%, #F5F0E8 100%);
       min-height: 100vh;
-      color: #0f172a;
+      color: #2C3E2B;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Floating Elements Animation */
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+      50% { transform: translateY(-20px) rotate(5deg); opacity: 0.9; }
+      100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+    }
+
+    @keyframes floatSlow {
+      0% { transform: translateX(0px) translateY(0px); }
+      50% { transform: translateX(15px) translateY(-10px); }
+      100% { transform: translateX(0px) translateY(0px); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.3; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .floating-element {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      font-size: 2rem;
+      opacity: 0.3;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-element:nth-child(1) { top: 10%; left: 5%; animation-duration: 8s; font-size: 3rem; }
+    .floating-element:nth-child(2) { top: 20%; right: 3%; animation-duration: 10s; animation-delay: 1s; font-size: 2.5rem; }
+    .floating-element:nth-child(3) { bottom: 15%; left: 8%; animation-duration: 7s; animation-delay: 2s; font-size: 2rem; }
+    .floating-element:nth-child(4) { bottom: 30%; right: 10%; animation-duration: 9s; animation-delay: 0.5s; font-size: 2.2rem; }
+    .floating-element:nth-child(5) { top: 50%; left: 15%; animation-duration: 11s; animation-delay: 1.5s; font-size: 1.8rem; }
+    .floating-element:nth-child(6) { bottom: 45%; right: 20%; animation-duration: 8.5s; animation-delay: 2.5s; font-size: 2rem; }
+
+    .gradient-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(245, 180, 120, 0.1) 0%, rgba(255, 200, 210, 0.08) 50%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* container */
     .app-container {
-      max-width: 1300px;
+      position: relative;
+      z-index: 2;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 20px 24px 40px;
     }
@@ -35,18 +84,19 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      background: rgba(255,255,255,0.75);
+      background: rgba(255, 245, 235, 0.85);
       backdrop-filter: blur(12px);
-      border-radius: 60px;
+      border-radius: 80px;
       padding: 12px 28px;
       margin-bottom: 32px;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.02), 0 2px 4px rgba(0,0,0,0.05);
-      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.02);
+      border: 1px solid rgba(245, 180, 120, 0.3);
     }
     .logo {
       font-size: 1.8rem;
       font-weight: 800;
-      background: linear-gradient(135deg, #1e3c72, #2b3b6e);
+      font-family: 'Playfair Display', serif;
+      background: linear-gradient(135deg, #D97742 0%, #E8A87C 40%, #6A8E6A 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
@@ -55,62 +105,73 @@
     .logo i {
       background: none;
       -webkit-background-clip: unset;
-      color: #2c3e66;
-      margin-right: 6px;
+      color: #D97742;
+      margin-right: 8px;
     }
     .user-info {
       display: flex;
       align-items: center;
       gap: 20px;
-      background: white;
-      padding: 6px 18px 6px 12px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 6px 20px 6px 12px;
       border-radius: 50px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 6px rgba(0,0,0,0.03);
     }
     .avatar-sm {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #e2e8f0;
+      border: 2px solid #E8A87C;
     }
     .btn {
       border: none;
-      background: #1f2b48;
+      background: #6A8E6A;
       color: white;
-      padding: 8px 20px;
-      border-radius: 40px;
-      font-weight: 500;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
       font-size: 0.9rem;
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(106, 142, 106, 0.3);
+      background: #527a52;
+    }
     .btn-outline {
       background: transparent;
-      border: 1px solid #cbd5e1;
-      color: #1f2b48;
+      border: 1px solid #D97742;
+      color: #D97742;
     }
     .btn-outline:hover {
-      background: #f1f5f9;
+      background: #FFF2E6;
+      box-shadow: 0 4px 12px rgba(217, 119, 66, 0.2);
+      transform: translateY(-2px);
     }
     .btn-primary {
-      background: #1e3a8a;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #D97742 0%, #E8A87C 100%);
+      box-shadow: 0 4px 12px rgba(217, 119, 66, 0.3);
     }
     .btn-primary:hover {
-      background: #1e2f5a;
-      transform: translateY(-1px);
+      background: linear-gradient(135deg, #c56530 0%, #dc9a6e 100%);
     }
     .card {
-      background: white;
-      border-radius: 32px;
-      padding: 24px;
-      box-shadow: 0 12px 28px -8px rgba(0,0,0,0.08);
-      transition: all 0.2s;
-      border: 1px solid #eef2ff;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(4px);
+      border-radius: 36px;
+      padding: 28px;
+      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(232, 168, 124, 0.3);
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 48px -16px rgba(0,0,0,0.12);
     }
     .grid-2 {
       display: grid;
@@ -127,31 +188,42 @@
     }
     .profile-form input, .profile-form textarea {
       width: 100%;
-      padding: 12px 16px;
-      border-radius: 24px;
-      border: 1px solid #e2e8f0;
+      padding: 14px 18px;
+      border-radius: 28px;
+      border: 1px solid #F5D5C0;
+      background: white;
       font-family: inherit;
       font-size: 0.95rem;
       margin-top: 6px;
       margin-bottom: 18px;
       transition: 0.2s;
     }
+    .profile-form input:focus, .profile-form textarea:focus {
+      outline: none;
+      border-color: #D97742;
+      box-shadow: 0 0 0 3px rgba(217, 119, 66, 0.1);
+    }
     .profile-form label {
       font-weight: 600;
       font-size: 0.85rem;
-      color: #334155;
+      color: #527a52;
       display: flex;
       align-items: center;
       gap: 8px;
     }
     .image-upload {
-      border: 2px dashed #cbd5e1;
+      border: 2px dashed #E8A87C;
       border-radius: 28px;
       padding: 20px;
       text-align: center;
       margin-bottom: 20px;
       cursor: pointer;
-      background: #fafcff;
+      background: #FFF9F5;
+      transition: all 0.3s;
+    }
+    .image-upload:hover {
+      background: #FFF2E6;
+      border-color: #D97742;
     }
     .preview-img {
       width: 120px;
@@ -160,42 +232,59 @@
       border-radius: 60px;
       margin: 10px auto;
       display: block;
-      border: 3px solid white;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border: 3px solid #E8A87C;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
     .profiles-list {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      max-height: 70vh;
+      max-height: 65vh;
       overflow-y: auto;
       padding-right: 6px;
+    }
+    .profiles-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .profiles-list::-webkit-scrollbar-track {
+      background: #F5D5C0;
+      border-radius: 10px;
+    }
+    .profiles-list::-webkit-scrollbar-thumb {
+      background: #D97742;
+      border-radius: 10px;
     }
     .profile-card {
       background: white;
       border-radius: 28px;
-      padding: 18px;
-      transition: 0.2s;
-      border: 1px solid #eef2ff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      padding: 20px;
+      transition: all 0.3s;
+      border: 1px solid #F5D5C0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
       display: flex;
       gap: 18px;
       align-items: flex-start;
+    }
+    .profile-card:hover {
+      transform: translateX(4px);
+      border-color: #E8A87C;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
     .profile-card-img {
       width: 70px;
       height: 70px;
       border-radius: 35px;
       object-fit: cover;
-      background: #eef2ff;
+      background: #FFF2E6;
     }
     .profile-info h4 {
       font-size: 1.2rem;
       font-weight: 700;
+      color: #2C3E2B;
     }
     .bio-text {
       font-size: 0.85rem;
-      color: #475569;
+      color: #6A8E6A;
       margin: 6px 0;
     }
     .social-links {
@@ -203,146 +292,183 @@
       gap: 12px;
       margin-top: 8px;
       font-size: 0.85rem;
+      color: #D97742;
     }
     .like-btn {
       background: none;
       border: none;
       font-size: 1.4rem;
       cursor: pointer;
-      transition: 0.1s;
+      transition: 0.2s;
       margin-left: auto;
-      color: #94a3b8;
+      color: #E8A87C;
+    }
+    .like-btn:hover {
+      transform: scale(1.1);
     }
     .liked-active {
-      color: #e11d48;
+      color: #D97742;
+      text-shadow: 0 0 8px rgba(217, 119, 66, 0.5);
     }
     .notification-badge {
-      background: #eef2ff;
-      border-radius: 24px;
-      padding: 8px 18px;
-      font-size: 0.8rem;
-      font-weight: 500;
+      background: linear-gradient(135deg, #FFF2E6, #FFE4E8);
+      border-radius: 40px;
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #D97742;
+      cursor: pointer;
     }
     .toast-msg {
       position: fixed;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      background: #0f172ad9;
+      background: #2C3E2B;
       backdrop-filter: blur(8px);
       color: white;
-      padding: 10px 20px;
+      padding: 12px 24px;
       border-radius: 60px;
       font-size: 0.9rem;
       z-index: 999;
       pointer-events: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     }
     .empty-state {
       text-align: center;
-      color: #64748b;
+      color: #8FAA8A;
       padding: 40px;
     }
     hr {
-      margin: 16px 0;
+      margin: 20px 0;
+      border-color: #F5D5C0;
     }
     footer {
       text-align: center;
       margin-top: 48px;
       font-size: 0.75rem;
-      color: #5b6e8c;
+      color: #8FAA8A;
+      background: rgba(255, 245, 235, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 40px;
+      padding: 16px;
     }
-    .inline-icon {
-      margin-right: 6px;
+    .privacy-badge {
+      background: rgba(106, 142, 106, 0.1);
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-top: 20px;
+      font-size: 0.7rem;
+      color: #6A8E6A;
+      text-align: center;
+      border: 1px solid rgba(217, 119, 66, 0.3);
+    }
+    @keyframes shimmer {
+      0% { background-position: -1000px 0; }
+      100% { background-position: 1000px 0; }
+    }
+    .loading-shimmer {
+      background: linear-gradient(90deg, #F5D5C0 25%, #FFE4E8 50%, #F5D5C0 75%);
+      background-size: 1000px 100%;
+      animation: shimmer 2s infinite;
     }
   </style>
 </head>
 <body>
 
+<div class="gradient-bg"></div>
+<div class="floating-element"><i class="fas fa-heart"></i></div>
+<div class="floating-element"><i class="fas fa-star"></i></div>
+<div class="floating-element"><i class="fas fa-circle-notch"></i></div>
+<div class="floating-element"><i class="fas fa-sparkle"></i></div>
+<div class="floating-element"><i class="fas fa-feather-alt"></i></div>
+<div class="floating-element"><i class="fas fa-crown"></i></div>
+
 <div class="app-container">
-  <!-- navbar -->
   <div class="navbar">
     <div class="logo">
       <i class="fas fa-circle-notch"></i> Circle · BMS
     </div>
     <div id="authSection" class="user-info">
-      <!-- dynamic content -->
       <span id="userEmailSpan" style="font-size:0.85rem; font-weight:500;"></span>
       <button id="loginBtn" class="btn btn-primary"><i class="fab fa-google"></i> College Login</button>
       <button id="logoutBtn" class="btn btn-outline" style="display:none;"><i class="fas fa-sign-out-alt"></i> Exit</button>
     </div>
   </div>
 
-  <!-- main content: visible only when logged in with @bmsce.ac.in -->
   <div id="mainContent" style="display: none;">
     <div class="grid-2">
-      <!-- Left Column: Build Profile -->
       <div class="card">
-        <h2><i class="fas fa-user-edit"></i> your Circle profile</h2>
-        <p style="color:#475569; margin-bottom: 20px; font-size:0.9rem;">Tell us about yourself — others will see this ✨</p>
+        <h2 style="color: #D97742;"><i class="fas fa-user-edit"></i> Your Circle Profile</h2>
+        <p style="color:#6A8E6A; margin-bottom: 20px;">✨ Share your vibe — others will see this ✨</p>
         <div class="profile-form">
-          <label><i class="fas fa-at"></i> Instagram ID</label>
-          <input type="text" id="instaInput" placeholder="@ or username" />
+          <label><i class="fab fa-instagram"></i> Instagram ID</label>
+          <input type="text" id="instaInput" placeholder="@yourusername" />
           
           <label><i class="fas fa-phone-alt"></i> Phone (optional)</label>
           <input type="tel" id="phoneInput" placeholder="+91 98765 43210" />
           
           <label><i class="fas fa-pen-fancy"></i> Cool Bio</label>
-          <textarea id="bioInput" rows="3" placeholder="Write something unique... 🌟"></textarea>
+          <textarea id="bioInput" rows="3" placeholder="Tell the Circle something about you... 🌟"></textarea>
           
-          <label><i class="fas fa-image"></i> Profile Image (LinkedIn style)</label>
+          <label><i class="fas fa-image"></i> Profile Image</label>
           <div id="uploadArea" class="image-upload">
-            <i class="fas fa-cloud-upload-alt fa-2x" style="color:#6c8fc7;"></i>
-            <p style="margin:8px 0">Click to upload or drag</p>
+            <i class="fas fa-cloud-upload-alt fa-2x" style="color:#D97742;"></i>
+            <p style="margin:8px 0">Click or drag image here</p>
             <input type="file" id="imageFile" accept="image/*" style="display:none" />
             <img id="profilePreview" class="preview-img" style="display:none;" alt="preview" />
           </div>
           
           <button id="saveProfileBtn" class="btn btn-primary" style="width:100%; justify-content:center;"><i class="fas fa-save"></i> Publish Profile</button>
-          <div id="profileStatus" style="margin-top: 12px; font-size:0.8rem; color:#2b6e3c;"></div>
+          <div id="profileStatus" style="margin-top: 12px; font-size:0.8rem; color:#D97742;"></div>
         </div>
       </div>
 
-      <!-- Right Column: Matching & Notifications -->
       <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap:wrap;">
-          <h2><i class="fas fa-users"></i> Circle Members</h2>
+          <h2 style="color: #D97742;"><i class="fas fa-users"></i> Circle Members</h2>
           <div id="notifArea" class="notification-badge"><i class="fas fa-heart"></i> likes: 0</div>
         </div>
-        <p style="margin: 6px 0 16px 0; font-size:0.85rem;">❤️ Like a profile → they get notified instantly!</p>
+        <p style="margin: 8px 0 16px 0; font-size:0.85rem;">❤️ Like a profile → they get notified instantly!</p>
         <div id="profilesContainer" class="profiles-list">
           <div class="empty-state"><i class="fas fa-spinner fa-pulse"></i> loading campus circle...</div>
         </div>
       </div>
     </div>
+    
+    <div class="privacy-badge">
+      <i class="fas fa-shield-alt"></i> <strong>Privacy Note:</strong> By joining Circle, you agree to share your name, profile image, bio, and Instagram ID with other verified @bmsce.ac.in members. Phone number is optional. Your email is kept private. This is a fun campus matching space — be kind, be real! 🎓
+    </div>
   </div>
 
-  <!-- not authorized / domain error -->
   <div id="domainError" style="display: none; text-align: center; margin-top: 60px;" class="card">
-    <i class="fas fa-ban" style="font-size: 48px; color:#b91c1c;"></i>
-    <h2 style="margin: 20px 0;">Access restricted</h2>
+    <i class="fas fa-ban" style="font-size: 48px; color:#D97742;"></i>
+    <h2 style="margin: 20px 0; color: #2C3E2B;">Access restricted</h2>
     <p>Only <strong>@bmsce.ac.in</strong> email domain is allowed.<br/>Please sign in with your BMS college account.</p>
     <button id="retryAuthBtn" class="btn btn-primary" style="margin-top: 20px;"><i class="fab fa-google"></i> Try again</button>
   </div>
+  
+  <footer>
+    <i class="fas fa-circle-notch"></i> Circle — where BMS connects. Be yourself, match vibes. 🧡
+  </footer>
 </div>
 <div id="toastMsg" class="toast-msg" style="display: none;"></div>
 
 <script type="module">
-  // ---------- FIREBASE CONFIG (REPLACE WITH YOUR OWN PROJECT CREDENTIALS) ----------
-  // !!! IMPORTANT: Replace these values with your actual Firebase project config !!!
+  // Firebase Config (already replaced with yours)
   const firebaseConfig = {
-    apiKey: "AIzaSyBqEo2MZeNUvBS8Zk4-l3Re2UcOQBb81bQ",   // <-- REPLACE
-    authDomain: "bms-circle.firebaseapp.com",          // <-- REPLACE
-    projectId: "bms-circle",                           // <-- REPLACE
-    storageBucket: "bms-circle.firebasestorage.app",           // <-- REPLACE
-    messagingSenderId: "99805289899",                 // <-- REPLACE
+    apiKey: "AIzaSyBqEo2MZeNUvBS8Zk4-l3Re2UcOQBb81bQ",
+    authDomain: "bms-circle.firebaseapp.com",
+    projectId: "bms-circle",
+    storageBucket: "bms-circle.firebasestorage.app",
+    messagingSenderId: "99805289899",
     appId: "1:99805289899:web:08fcd851ba037a4c6246ee",
-    measurementId: "G-51W6EM6547"       // <-- REPLACE
+    measurementId: "G-51W6EM6547"
   };
-  // --------------------------------------------------------------------------------
   
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
   const app = initializeApp(firebaseConfig);
@@ -352,7 +478,6 @@
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: 'select_account' });
 
-  // DOM elements
   const loginBtn = document.getElementById('loginBtn');
   const logoutBtn = document.getElementById('logoutBtn');
   const mainContent = document.getElementById('mainContent');
@@ -371,10 +496,9 @@
   const profileStatus = document.getElementById('profileStatus');
   const toastMsgDiv = document.getElementById('toastMsg');
 
-  let currentUser = null;         // firebase user object
-  let currentUserData = null;     // profile data from firestore
-  let uploadedImageUrl = null;     // temp URL before saving
-  let realtimeUnsub = null;        // unsubscribe profiles listener
+  let currentUser = null;
+  let currentUserData = null;
+  let realtimeUnsub = null;
 
   function showToast(msg, duration = 2500) {
     toastMsgDiv.innerText = msg;
@@ -382,12 +506,10 @@
     setTimeout(() => { toastMsgDiv.style.display = 'none'; }, duration);
   }
 
-  // check if email domain is @bmsce.ac.in
   function isValidDomain(email) {
     return email && email.endsWith('@bmsce.ac.in');
   }
 
-  // logout
   async function handleLogout() {
     await signOut(auth);
     showToast('Logged out from Circle');
@@ -405,35 +527,28 @@
     currentUserData = null;
   }
 
-  // load my own profile data from Firestore
   async function fetchMyProfile(uid) {
     const docRef = doc(db, "profiles", uid);
     const snap = await getDoc(docRef);
     if (snap.exists()) {
       currentUserData = snap.data();
-      // populate form
       instaInput.value = currentUserData.instagram || '';
       phoneInput.value = currentUserData.phone || '';
       bioInput.value = currentUserData.bio || '';
       if (currentUserData.photoURL) {
         profilePreview.src = currentUserData.photoURL;
         profilePreview.style.display = 'block';
-        uploadedImageUrl = currentUserData.photoURL;
       } else {
         profilePreview.style.display = 'none';
       }
       profileStatus.innerText = '✅ Profile loaded';
     } else {
       currentUserData = null;
-      instaInput.value = '';
-      phoneInput.value = '';
-      bioInput.value = '';
       profilePreview.style.display = 'none';
-      profileStatus.innerText = '✨ Create your first profile';
+      profileStatus.innerText = '✨ Create your profile';
     }
   }
 
-  // save profile (with optional new image)
   async function saveProfile() {
     if (!currentUser) return;
     const uid = currentUser.uid;
@@ -442,25 +557,25 @@
     const bio = bioInput.value.trim();
     
     let finalPhotoUrl = currentUserData?.photoURL || null;
-    // if user selected a new file and uploadedImageUrl is a new blob url? Actually we handle upload to storage.
     const file = imageFileInput.files[0];
+    
     if (file) {
       try {
-        profileStatus.innerText = '📸 Uploading image...';
+        profileStatus.innerText = '📸 Uploading...';
         const storageRef = ref(storage, `profile_images/${uid}_${Date.now()}`);
         await uploadBytes(storageRef, file);
         finalPhotoUrl = await getDownloadURL(storageRef);
-        uploadedImageUrl = finalPhotoUrl;
         profilePreview.src = finalPhotoUrl;
         profilePreview.style.display = 'block';
+        showToast('Image uploaded!');
       } catch (err) {
-        console.error(err);
-        profileStatus.innerText = '⚠️ Image upload failed';
-        showToast('Image upload error');
+        console.error("Upload error:", err);
+        profileStatus.innerText = '⚠️ Image upload failed. Check storage rules.';
+        showToast('Image upload failed. Make sure Storage is in test mode.');
         return;
       }
-    } else if (uploadedImageUrl && !file) {
-      finalPhotoUrl = uploadedImageUrl; // keep existing if no new file
+    } else if (currentUserData?.photoURL) {
+      finalPhotoUrl = currentUserData.photoURL;
     }
     
     const profileData = {
@@ -477,8 +592,7 @@
       await setDoc(doc(db, "profiles", uid), profileData, { merge: true });
       currentUserData = profileData;
       profileStatus.innerText = '🎉 Profile published!';
-      showToast('Profile saved successfully');
-      // reset file input
+      showToast('Profile saved!');
       imageFileInput.value = '';
     } catch (err) {
       console.error(err);
@@ -487,9 +601,7 @@
     }
   }
 
-  // render all profiles (except current user) with like interactions
   function renderProfiles(profilesList, currentUserId, currentUserLikesSet = new Set()) {
-    if (!profilesContainer) return;
     if (!profilesList.length) {
       profilesContainer.innerHTML = `<div class="empty-state"><i class="fas fa-smile-wink"></i> No other profiles yet. Be the first!</div>`;
       return;
@@ -499,27 +611,25 @@
       const uid = profile.uid;
       const isLiked = currentUserLikesSet.has(uid);
       const likeIconClass = isLiked ? 'fas fa-heart liked-active' : 'far fa-heart';
-      const likeBtnText = isLiked ? ' Liked' : ' Like';
-      const photo = profile.photoURL && profile.photoURL !== '' ? profile.photoURL : 'https://ui-avatars.com/api/?background=1e3a8a&color=fff&bold=true&size=80&name='+encodeURIComponent(profile.displayName || 'BMS');
+      const photo = profile.photoURL ? profile.photoURL : `https://ui-avatars.com/api/?background=D97742&color=fff&bold=true&size=80&name=${encodeURIComponent(profile.displayName || 'BMS')}`;
       html += `
         <div class="profile-card" data-uid="${uid}">
-          <img class="profile-card-img" src="${photo}" onerror="this.src='https://ui-avatars.com/api/?background=64748b&color=fff&size=70&name=U'">
+          <img class="profile-card-img" src="${photo}" onerror="this.src='https://ui-avatars.com/api/?background=6A8E6A&color=fff&size=70&name=U'">
           <div class="profile-info" style="flex:1">
             <h4>${escapeHtml(profile.displayName || 'BMS Student')}</h4>
-            <div class="bio-text">${escapeHtml(profile.bio?.substring(0, 120) || 'no bio yet 🌱')}</div>
+            <div class="bio-text">${escapeHtml(profile.bio?.substring(0, 120) || '✨ new to Circle')}</div>
             <div class="social-links">
               ${profile.instagram ? `<span><i class="fab fa-instagram"></i> ${escapeHtml(profile.instagram)}</span>` : ''}
               ${profile.phone ? `<span><i class="fas fa-phone-alt"></i> ${escapeHtml(profile.phone)}</span>` : ''}
             </div>
           </div>
           <button class="like-btn ${isLiked ? 'liked-active' : ''}" data-targetuid="${uid}">
-            <i class="${likeIconClass}"></i> <span style="font-size:0.75rem;">${likeBtnText}</span>
+            <i class="${likeIconClass}"></i> <span style="font-size:0.7rem;">${isLiked ? 'Liked' : 'Like'}</span>
           </button>
         </div>
       `;
     }
     profilesContainer.innerHTML = html;
-    // attach like event listeners
     document.querySelectorAll('.like-btn').forEach(btn => {
       btn.addEventListener('click', async (e) => {
         e.stopPropagation();
@@ -531,9 +641,7 @@
         
         try {
           if (!currentlyLiked) {
-            // add like
             await setDoc(userLikesRef, { likedProfiles: arrayUnion(targetUid) }, { merge: true });
-            // add notification for target user
             await setDoc(targetNotifRef, {
               notifications: arrayUnion({
                 fromUid: currentUser.uid,
@@ -543,14 +651,11 @@
                 type: 'like'
               })
             }, { merge: true });
-            showToast(`❤️ You liked ${targetUid === currentUser.uid ? 'yourself? nah' : 'this profile!'}`);
+            showToast(`❤️ Liked! They'll be notified`);
           } else {
-            // unlike
             await updateDoc(userLikesRef, { likedProfiles: arrayRemove(targetUid) });
-            // (optional remove notification but we keep simple)
             showToast(`💔 Unliked`);
           }
-          // UI will refresh via snapshot, no need manual
         } catch (err) {
           console.error(err);
           showToast('Action failed');
@@ -561,11 +666,9 @@
 
   function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
-  // setup realtime profiles + likes + notifications counter
   function subscribeProfilesAndLikes(userId) {
     if (realtimeUnsub) realtimeUnsub();
     const profilesQuery = query(collection(db, "profiles"), orderBy("updatedAt", "desc"));
-    // listener for profiles
     const unsubProfiles = onSnapshot(profilesQuery, async (snapshot) => {
       let allProfiles = [];
       snapshot.forEach(docSnap => {
@@ -573,31 +676,27 @@
           allProfiles.push({ uid: docSnap.id, ...docSnap.data() });
         }
       });
-      // get current user's liked list
       let likedSet = new Set();
       const likesDocRef = doc(db, "likes", userId);
       const likesSnap = await getDoc(likesDocRef);
       if (likesSnap.exists() && likesSnap.data().likedProfiles) {
         likedSet = new Set(likesSnap.data().likedProfiles);
       }
-      // update like counts in render
       renderProfiles(allProfiles, userId, likedSet);
       
-      // fetch notifications for current user to show count
       const notifRef = doc(db, "notifications", userId);
       const notifSnap = await getDoc(notifRef);
       let unreadCount = 0;
       if (notifSnap.exists() && notifSnap.data().notifications) {
-        const notifs = notifSnap.data().notifications;
-        unreadCount = notifs.filter(n => n.read === false).length;
+        unreadCount = notifSnap.data().notifications.filter(n => n.read === false).length;
       }
       notifArea.innerHTML = `<i class="fas fa-heart"></i> likes: ${unreadCount}`;
       if (unreadCount > 0) {
-        notifArea.style.background = "#fce7f3";
+        notifArea.style.background = "linear-gradient(135deg, #FFE4E8, #FFF2E6)";
         notifArea.style.cursor = "pointer";
         notifArea.onclick = () => { markNotificationsAsRead(userId); };
       } else {
-        notifArea.style.background = "#eef2ff";
+        notifArea.style.background = "linear-gradient(135deg, #FFF2E6, #FFE4E8)";
         notifArea.onclick = null;
       }
     });
@@ -612,11 +711,9 @@
       await setDoc(notifRef, { notifications: updatedNotifs }, { merge: true });
       showToast("✨ Notifications cleared");
       notifArea.innerHTML = `<i class="fas fa-heart"></i> likes: 0`;
-      notifArea.style.background = "#eef2ff";
     }
   }
 
-  // handle auth state
   onAuthStateChanged(auth, async (user) => {
     if (user && isValidDomain(user.email)) {
       currentUser = user;
@@ -629,7 +726,6 @@
       subscribeProfilesAndLikes(user.uid);
     } 
     else if (user && !isValidDomain(user.email)) {
-      // signed in with wrong domain
       await signOut(auth);
       resetUIForGuest();
       domainErrorDiv.style.display = 'block';
@@ -661,29 +757,24 @@
       reader.onload = (ev) => {
         profilePreview.src = ev.target.result;
         profilePreview.style.display = 'block';
-        uploadedImageUrl = ev.target.result; // temp for preview, will re-upload on save
       };
       reader.readAsDataURL(file);
     }
   });
   
-  // small drag effect
-  uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.background = '#eef2ff'; });
-  uploadArea.addEventListener('dragleave', () => { uploadArea.style.background = '#fafcff'; });
+  uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.background = '#FFF2E6'; });
+  uploadArea.addEventListener('dragleave', () => { uploadArea.style.background = '#FFF9F5'; });
   uploadArea.addEventListener('drop', (e) => {
     e.preventDefault();
-    uploadArea.style.background = '#fafcff';
+    uploadArea.style.background = '#FFF9F5';
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
       imageFileInput.files = e.dataTransfer.files;
       const reader = new FileReader();
-      reader.onload = (ev) => { profilePreview.src = ev.target.result; profilePreview.style.display = 'block'; uploadedImageUrl = ev.target.result; };
+      reader.onload = (ev) => { profilePreview.src = ev.target.result; profilePreview.style.display = 'block'; };
       reader.readAsDataURL(file);
     }
   });
-  
-  // initial hint
-  console.log('Circle ready | BMS only');
 </script>
 </body>
 </html>
