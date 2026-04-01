@@ -22,6 +22,11 @@
       position: relative;
     }
 
+    /* Hide main app initially while loading */
+    body.loading #mainApp {
+      display: none;
+    }
+
     /* Elegant gradient overlay */
     body::before {
       content: '';
@@ -462,7 +467,7 @@
     }
   </style>
 </head>
-<body>
+<body class="loading">
 
 <!-- MASQUERADE ENTRANCE MODAL (Stays until accepted) -->
 <div id="entranceModal" class="modal-masquerade">
@@ -517,7 +522,7 @@
 </div>
 
 <!-- Main App -->
-<div id="mainApp" class="container hidden">
+<div id="mainApp" class="container">
   <div class="navbar">
     <div class="logo-area">
       <i class="fas fa-mask"></i>
@@ -589,6 +594,7 @@
   let allProfiles = [];
   let currentIndex = 0;
   let likedSet = new Set();
+  let appInitialized = false;
 
   function showToast(message) {
     const toast = document.createElement('div');
@@ -783,23 +789,33 @@
     showToast('You have left the masquerade. Until we meet again.');
   }
 
+  // FIXED: Auth state handler with appInitialized flag and loading removal
+  onAuthStateChanged(auth, async (user) => {
+    if (appInitialized) return;
+    appInitialized = true;
+
+    if (user && user.email?.endsWith('@bmsce.ac.in')) {
+      currentUser = user;
+      userEmailDisplay.innerHTML = `<i class="fas fa-envelope"></i> ${user.email.split('@')[0]}`;
+      entranceModal.classList.add('hidden');
+      await checkProfileExists();
+    } else {
+      // Not logged in → KEEP modal visible
+      entranceModal.classList.remove('hidden');
+      mainApp.classList.add('hidden');
+      profileModal.classList.add('hidden');
+    }
+    
+    // Remove loading class after auth is resolved
+    document.body.classList.remove('loading');
+  });
+
   // Event Listeners
   acceptBtn.addEventListener('click', initiateLogin);
   completeProfileBtn.addEventListener('click', saveProfile);
   logoutBtn.addEventListener('click', handleLogout);
   likeAction.addEventListener('click', handleLike);
   dislikeAction.addEventListener('click', handleDislike);
-
-  onAuthStateChanged(auth, (user) => {
-    if (user && user.email?.endsWith('@bmsce.ac.in')) {
-      currentUser = user;
-      userEmailDisplay.innerHTML = `<i class="fas fa-envelope"></i> ${user.email.split('@')[0]}`;
-      entranceModal.classList.add('hidden');
-      checkProfileExists();
-    } else if (user) {
-      signOut(auth);
-    }
-  });
 
   function escapeHtml(str) {
     if (!str) return '';
