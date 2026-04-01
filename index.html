@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Circle | BMS Connect</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Elite Circle | BMSce Only</title>
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Hammer.js for swipe gestures -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -15,460 +17,437 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #FFF2E6 0%, #FFE4E8 50%, #F5F0E8 100%);
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
       min-height: 100vh;
-      color: #2C3E2B;
-      position: relative;
       overflow-x: hidden;
+      color: #fff;
     }
 
-    /* Floating Elements Animation */
-    @keyframes float {
-      0% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-      50% { transform: translateY(-20px) rotate(5deg); opacity: 0.9; }
-      100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-    }
-
-    @keyframes floatSlow {
-      0% { transform: translateX(0px) translateY(0px); }
-      50% { transform: translateX(15px) translateY(-10px); }
-      100% { transform: translateX(0px) translateY(0px); }
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.3; }
-      100% { transform: scale(1.5); opacity: 0; }
-    }
-
-    .floating-element {
-      position: fixed;
-      pointer-events: none;
-      z-index: 0;
-      font-size: 2rem;
-      opacity: 0.3;
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .floating-element:nth-child(1) { top: 10%; left: 5%; animation-duration: 8s; font-size: 3rem; }
-    .floating-element:nth-child(2) { top: 20%; right: 3%; animation-duration: 10s; animation-delay: 1s; font-size: 2.5rem; }
-    .floating-element:nth-child(3) { bottom: 15%; left: 8%; animation-duration: 7s; animation-delay: 2s; font-size: 2rem; }
-    .floating-element:nth-child(4) { bottom: 30%; right: 10%; animation-duration: 9s; animation-delay: 0.5s; font-size: 2.2rem; }
-    .floating-element:nth-child(5) { top: 50%; left: 15%; animation-duration: 11s; animation-delay: 1.5s; font-size: 1.8rem; }
-    .floating-element:nth-child(6) { bottom: 45%; right: 20%; animation-duration: 8.5s; animation-delay: 2.5s; font-size: 2rem; }
-
-    .gradient-bg {
+    /* Entrance Modal - Elite Club */
+    .elite-modal {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 50%, rgba(245, 180, 120, 0.1) 0%, rgba(255, 200, 210, 0.08) 50%, transparent 80%);
-      pointer-events: none;
-      z-index: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s ease;
+      z-index: 10000;
     }
 
-    /* container */
-    .app-container {
+    .elite-card {
+      background: linear-gradient(135deg, rgba(255, 215, 120, 0.15), rgba(255, 105, 180, 0.1));
+      backdrop-filter: blur(20px);
+      border-radius: 48px;
+      padding: 48px 40px;
+      max-width: 550px;
+      margin: 20px;
+      text-align: center;
+      border: 2px solid rgba(255, 215, 0, 0.5);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.2);
+      animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .elite-icon {
+      font-size: 5rem;
+      background: linear-gradient(135deg, #FFD700, #FF6B6B);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .elite-card h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #FFD700, #FF6B6B, #FF1493);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 16px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .elite-card p {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+      margin: 16px 0;
+    }
+
+    .feature-list {
+      text-align: left;
+      margin: 24px 0;
+      padding: 0 20px;
+    }
+
+    .feature-list li {
+      margin: 12px 0;
+      color: #FFD700;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .feature-list li i {
+      width: 24px;
+      color: #FF6B6B;
+    }
+
+    .agree-btn {
+      background: linear-gradient(135deg, #FFD700, #FF6B6B);
+      border: none;
+      padding: 16px 40px;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 24px;
+      width: 100%;
+    }
+
+    .agree-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+    }
+
+    /* Main App Container */
+    .app-wrapper {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
       position: relative;
       z-index: 2;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px 24px 40px;
     }
 
-    /* header / navbar */
+    /* Navbar */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      background: rgba(255, 245, 235, 0.85);
-      backdrop-filter: blur(12px);
-      border-radius: 80px;
-      padding: 12px 28px;
-      margin-bottom: 32px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.02);
-      border: 1px solid rgba(245, 180, 120, 0.3);
+      padding: 16px 0;
+      margin-bottom: 24px;
     }
+
     .logo {
       font-size: 1.8rem;
       font-weight: 800;
-      font-family: 'Playfair Display', serif;
-      background: linear-gradient(135deg, #D97742 0%, #E8A87C 40%, #6A8E6A 100%);
+      background: linear-gradient(135deg, #FFD700, #FF6B6B);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      letter-spacing: -0.3px;
     }
-    .logo i {
-      background: none;
-      -webkit-background-clip: unset;
-      color: #D97742;
-      margin-right: 8px;
-    }
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 6px 20px 6px 12px;
-      border-radius: 50px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.03);
-    }
-    .avatar-sm {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #E8A87C;
-    }
-    .btn {
-      border: none;
-      background: #6A8E6A;
-      color: white;
-      padding: 10px 24px;
-      border-radius: 50px;
+
+    .badge {
+      background: rgba(255, 215, 0, 0.2);
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 0.75rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      backdrop-filter: blur(10px);
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(106, 142, 106, 0.3);
-      background: #527a52;
+
+    /* Swipe Card Container */
+    .swipe-container {
+      position: relative;
+      height: 65vh;
+      min-height: 500px;
+      margin-bottom: 24px;
     }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #D97742;
-      color: #D97742;
-    }
-    .btn-outline:hover {
-      background: #FFF2E6;
-      box-shadow: 0 4px 12px rgba(217, 119, 66, 0.2);
-      transform: translateY(-2px);
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #D97742 0%, #E8A87C 100%);
-      box-shadow: 0 4px 12px rgba(217, 119, 66, 0.3);
-    }
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #c56530 0%, #dc9a6e 100%);
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(4px);
-      border-radius: 36px;
-      padding: 28px;
-      box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(232, 168, 124, 0.3);
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 28px 48px -16px rgba(0,0,0,0.12);
-    }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 28px;
-    }
-    @media (max-width: 800px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-      .app-container {
-        padding: 16px;
-      }
-    }
-    .profile-form input, .profile-form textarea {
+
+    .swipe-card {
+      position: absolute;
       width: 100%;
-      padding: 14px 18px;
-      border-radius: 28px;
-      border: 1px solid #F5D5C0;
-      background: white;
-      font-family: inherit;
-      font-size: 0.95rem;
-      margin-top: 6px;
-      margin-bottom: 18px;
-      transition: 0.2s;
-    }
-    .profile-form input:focus, .profile-form textarea:focus {
-      outline: none;
-      border-color: #D97742;
-      box-shadow: 0 0 0 3px rgba(217, 119, 66, 0.1);
-    }
-    .profile-form label {
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #527a52;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .image-upload {
-      border: 2px dashed #E8A87C;
-      border-radius: 28px;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-      cursor: pointer;
-      background: #FFF9F5;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      backdrop-filter: blur(10px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
       transition: all 0.3s;
+      cursor: grab;
     }
-    .image-upload:hover {
-      background: #FFF2E6;
-      border-color: #D97742;
+
+    .swipe-card:active {
+      cursor: grabbing;
     }
-    .preview-img {
-      width: 120px;
-      height: 120px;
+
+    .card-image {
+      width: 100%;
+      height: 70%;
       object-fit: cover;
-      border-radius: 60px;
-      margin: 10px auto;
-      display: block;
-      border: 3px solid #E8A87C;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      background: linear-gradient(135deg, #FFD70020, #FF6B6B20);
     }
-    .profiles-list {
+
+    .card-info {
+      padding: 24px;
+    }
+
+    .card-info h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .card-info p {
+      color: rgba(255, 255, 255, 0.7);
+      margin: 8px 0;
+      line-height: 1.4;
+    }
+
+    .social-badges {
       display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-height: 65vh;
-      overflow-y: auto;
-      padding-right: 6px;
+      gap: 16px;
+      margin-top: 12px;
     }
-    .profiles-list::-webkit-scrollbar {
-      width: 6px;
+
+    .social-badges span {
+      background: rgba(255, 215, 0, 0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
     }
-    .profiles-list::-webkit-scrollbar-track {
-      background: #F5D5C0;
-      border-radius: 10px;
-    }
-    .profiles-list::-webkit-scrollbar-thumb {
-      background: #D97742;
-      border-radius: 10px;
-    }
-    .profile-card {
-      background: white;
-      border-radius: 28px;
-      padding: 20px;
-      transition: all 0.3s;
-      border: 1px solid #F5D5C0;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+
+    /* Action Buttons */
+    .action-buttons {
       display: flex;
-      gap: 18px;
-      align-items: flex-start;
+      justify-content: center;
+      gap: 32px;
+      margin: 24px 0;
     }
-    .profile-card:hover {
-      transform: translateX(4px);
-      border-color: #E8A87C;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    }
-    .profile-card-img {
+
+    .action-btn {
       width: 70px;
       height: 70px;
-      border-radius: 35px;
-      object-fit: cover;
-      background: #FFF2E6;
-    }
-    .profile-info h4 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #2C3E2B;
-    }
-    .bio-text {
-      font-size: 0.85rem;
-      color: #6A8E6A;
-      margin: 6px 0;
-    }
-    .social-links {
-      display: flex;
-      gap: 12px;
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: #D97742;
-    }
-    .like-btn {
-      background: none;
+      border-radius: 50%;
       border: none;
-      font-size: 1.4rem;
+      font-size: 2rem;
       cursor: pointer;
-      transition: 0.2s;
-      margin-left: auto;
-      color: #E8A87C;
+      transition: all 0.3s;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
     }
-    .like-btn:hover {
+
+    .action-btn:hover {
       transform: scale(1.1);
     }
-    .liked-active {
-      color: #D97742;
-      text-shadow: 0 0 8px rgba(217, 119, 66, 0.5);
+
+    .dislike-btn:hover {
+      background: #ff4444;
+      box-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
     }
-    .notification-badge {
-      background: linear-gradient(135deg, #FFF2E6, #FFE4E8);
-      border-radius: 40px;
-      padding: 8px 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #D97742;
-      cursor: pointer;
+
+    .like-btn:hover {
+      background: #4caf50;
+      box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
     }
-    .toast-msg {
+
+    /* Match Notification */
+    .match-popup {
       position: fixed;
-      bottom: 24px;
+      top: 50%;
       left: 50%;
-      transform: translateX(-50%);
-      background: #2C3E2B;
-      backdrop-filter: blur(8px);
-      color: white;
-      padding: 12px 24px;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #FFD700, #FF6B6B);
+      padding: 40px;
       border-radius: 60px;
-      font-size: 0.9rem;
-      z-index: 999;
-      pointer-events: none;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      text-align: center;
+      z-index: 2000;
+      animation: bounceIn 0.5s ease;
+      box-shadow: 0 0 50px rgba(255, 107, 107, 0.8);
     }
+
+    @keyframes bounceIn {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      80% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    .match-popup h2 {
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+
+    /* Profile Form Modal */
+    .profile-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .profile-form-card {
+      background: linear-gradient(135deg, #1e1e3a, #0f0f2a);
+      border-radius: 48px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .profile-form-card input, .profile-form-card textarea {
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    /* Notifications */
+    .notification-toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #FFD700, #FF6B6B);
+      padding: 12px 24px;
+      border-radius: 40px;
+      z-index: 2000;
+      animation: slideInRight 0.3s ease;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
     .empty-state {
       text-align: center;
-      color: #8FAA8A;
-      padding: 40px;
+      padding: 60px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 32px;
     }
-    hr {
-      margin: 20px 0;
-      border-color: #F5D5C0;
-    }
-    footer {
-      text-align: center;
-      margin-top: 48px;
-      font-size: 0.75rem;
-      color: #8FAA8A;
-      background: rgba(255, 245, 235, 0.7);
-      backdrop-filter: blur(4px);
-      border-radius: 40px;
-      padding: 16px;
-    }
-    .privacy-badge {
-      background: rgba(106, 142, 106, 0.1);
-      border-radius: 20px;
-      padding: 12px 16px;
-      margin-top: 20px;
-      font-size: 0.7rem;
-      color: #6A8E6A;
-      text-align: center;
-      border: 1px solid rgba(217, 119, 66, 0.3);
-    }
-    @keyframes shimmer {
-      0% { background-position: -1000px 0; }
-      100% { background-position: 1000px 0; }
-    }
-    .loading-shimmer {
-      background: linear-gradient(90deg, #F5D5C0 25%, #FFE4E8 50%, #F5D5C0 75%);
-      background-size: 1000px 100%;
-      animation: shimmer 2s infinite;
+
+    /* Hide elements */
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-<div class="gradient-bg"></div>
-<div class="floating-element"><i class="fas fa-heart"></i></div>
-<div class="floating-element"><i class="fas fa-star"></i></div>
-<div class="floating-element"><i class="fas fa-circle-notch"></i></div>
-<div class="floating-element"><i class="fas fa-sparkle"></i></div>
-<div class="floating-element"><i class="fas fa-feather-alt"></i></div>
-<div class="floating-element"><i class="fas fa-crown"></i></div>
-
-<div class="app-container">
-  <div class="navbar">
-    <div class="logo">
-      <i class="fas fa-circle-notch"></i> Circle · BMS
+<!-- Elite Club Entrance Modal -->
+<div id="eliteModal" class="elite-modal">
+  <div class="elite-card">
+    <div class="elite-icon">
+      <i class="fas fa-crown"></i>
     </div>
-    <div id="authSection" class="user-info">
-      <span id="userEmailSpan" style="font-size:0.85rem; font-weight:500;"></span>
-      <button id="loginBtn" class="btn btn-primary"><i class="fab fa-google"></i> College Login</button>
-      <button id="logoutBtn" class="btn btn-outline" style="display:none;"><i class="fas fa-sign-out-alt"></i> Exit</button>
+    <h1>ELITE CIRCLE</h1>
+    <p><strong>BMS College of Engineering</strong> — where the brightest minds connect.</p>
+    <div class="feature-list">
+      <li><i class="fas fa-check-circle"></i> Only @bmsce.ac.in verified students</li>
+      <li><i class="fas fa-heart"></i> Swipe right to find your campus match</li>
+      <li><i class="fas fa-bell"></i> Real-time notifications when someone likes you</li>
+      <li><i class="fab fa-linkedin"></i> Auto-import your LinkedIn profile image</li>
     </div>
+    <p style="font-size: 0.85rem; opacity: 0.6;">By joining, you agree to share your profile with fellow BMSce students. Your email stays private.</p>
+    <button class="agree-btn" id="agreeBtn"><i class="fas fa-gem"></i> I'M ELITE — LET ME IN</button>
   </div>
-
-  <div id="mainContent" style="display: none;">
-    <div class="grid-2">
-      <div class="card">
-        <h2 style="color: #D97742;"><i class="fas fa-user-edit"></i> Your Circle Profile</h2>
-        <p style="color:#6A8E6A; margin-bottom: 20px;">✨ Share your vibe — others will see this ✨</p>
-        <div class="profile-form">
-          <label><i class="fab fa-instagram"></i> Instagram ID</label>
-          <input type="text" id="instaInput" placeholder="@yourusername" />
-          
-          <label><i class="fas fa-phone-alt"></i> Phone (optional)</label>
-          <input type="tel" id="phoneInput" placeholder="+91 98765 43210" />
-          
-          <label><i class="fas fa-pen-fancy"></i> Cool Bio</label>
-          <textarea id="bioInput" rows="3" placeholder="Tell the Circle something about you... 🌟"></textarea>
-          
-          <label><i class="fas fa-image"></i> Profile Image</label>
-          <div id="uploadArea" class="image-upload">
-            <i class="fas fa-cloud-upload-alt fa-2x" style="color:#D97742;"></i>
-            <p style="margin:8px 0">Click or drag image here</p>
-            <input type="file" id="imageFile" accept="image/*" style="display:none" />
-            <img id="profilePreview" class="preview-img" style="display:none;" alt="preview" />
-          </div>
-          
-          <button id="saveProfileBtn" class="btn btn-primary" style="width:100%; justify-content:center;"><i class="fas fa-save"></i> Publish Profile</button>
-          <div id="profileStatus" style="margin-top: 12px; font-size:0.8rem; color:#D97742;"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap:wrap;">
-          <h2 style="color: #D97742;"><i class="fas fa-users"></i> Circle Members</h2>
-          <div id="notifArea" class="notification-badge"><i class="fas fa-heart"></i> likes: 0</div>
-        </div>
-        <p style="margin: 8px 0 16px 0; font-size:0.85rem;">❤️ Like a profile → they get notified instantly!</p>
-        <div id="profilesContainer" class="profiles-list">
-          <div class="empty-state"><i class="fas fa-spinner fa-pulse"></i> loading campus circle...</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="privacy-badge">
-      <i class="fas fa-shield-alt"></i> <strong>Privacy Note:</strong> By joining Circle, you agree to share your name, profile image, bio, and Instagram ID with other verified @bmsce.ac.in members. Phone number is optional. Your email is kept private. This is a fun campus matching space — be kind, be real! 🎓
-    </div>
-  </div>
-
-  <div id="domainError" style="display: none; text-align: center; margin-top: 60px;" class="card">
-    <i class="fas fa-ban" style="font-size: 48px; color:#D97742;"></i>
-    <h2 style="margin: 20px 0; color: #2C3E2B;">Access restricted</h2>
-    <p>Only <strong>@bmsce.ac.in</strong> email domain is allowed.<br/>Please sign in with your BMS college account.</p>
-    <button id="retryAuthBtn" class="btn btn-primary" style="margin-top: 20px;"><i class="fab fa-google"></i> Try again</button>
-  </div>
-  
-  <footer>
-    <i class="fas fa-circle-notch"></i> Circle — where BMS connects. Be yourself, match vibes. 🧡
-  </footer>
 </div>
-<div id="toastMsg" class="toast-msg" style="display: none;"></div>
+
+<!-- Main App (hidden until login) -->
+<div id="mainApp" class="app-wrapper hidden">
+  <div class="navbar">
+    <div class="logo"><i class="fas fa-crown"></i> ELITE CIRCLE</div>
+    <div class="badge" id="userEmailBadge"></div>
+  </div>
+
+  <!-- Swipe Area -->
+  <div id="swipeArea">
+    <div class="swipe-container" id="swipeContainer">
+      <div class="empty-state">
+        <i class="fas fa-spinner fa-pulse fa-3x"></i>
+        <p style="margin-top: 20px;">Loading elite members...</p>
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button class="action-btn dislike-btn" id="dislikeBtn"><i class="fas fa-times"></i></button>
+      <button class="action-btn like-btn" id="likeBtn"><i class="fas fa-heart"></i></button>
+    </div>
+  </div>
+
+  <!-- My Matches Section -->
+  <div style="margin-top: 32px;">
+    <h3><i class="fas fa-star"></i> Your Matches <span id="matchCount">0</span></h3>
+    <div id="matchesList" style="display: flex; gap: 12px; overflow-x: auto; padding: 16px 0;"></div>
+  </div>
+</div>
+
+<!-- Profile Setup Modal -->
+<div id="profileModal" class="profile-modal hidden">
+  <div class="profile-form-card">
+    <h2 style="margin-bottom: 24px;">✨ Complete Your Elite Profile</h2>
+    <input type="text" id="displayName" placeholder="Your Name" />
+    <input type="text" id="linkedinUrl" placeholder="LinkedIn Profile URL (for photo)" />
+    <textarea id="bio" rows="3" placeholder="Tell us about yourself... your vibe, interests, what you're looking for"></textarea>
+    <input type="text" id="instagram" placeholder="Instagram username" />
+    <input type="text" id="phone" placeholder="Phone (optional)" />
+    <button id="saveProfileBtn" style="width: 100%; padding: 14px; border-radius: 28px; background: linear-gradient(135deg, #FFD700, #FF6B6B); border: none; font-weight: bold; margin-top: 20px;">Save & Start Swiping</button>
+  </div>
+</div>
 
 <script type="module">
-  // Firebase Config (already replaced with yours)
+  // Firebase Config (yours)
   const firebaseConfig = {
     apiKey: "AIzaSyBqEo2MZeNUvBS8Zk4-l3Re2UcOQBb81bQ",
     authDomain: "bms-circle.firebaseapp.com",
     projectId: "bms-circle",
     storageBucket: "bms-circle.firebasestorage.app",
     messagingSenderId: "99805289899",
-    appId: "1:99805289899:web:08fcd851ba037a4c6246ee",
-    measurementId: "G-51W6EM6547"
+    appId: "1:99805289899:web:08fcd851ba037a4c6246ee"
   };
-  
+
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, collection, query, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
   const app = initializeApp(firebaseConfig);
@@ -476,303 +455,293 @@
   const db = getFirestore(app);
   const storage = getStorage(app);
   const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: 'select_account' });
-
-  const loginBtn = document.getElementById('loginBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
-  const mainContent = document.getElementById('mainContent');
-  const domainErrorDiv = document.getElementById('domainError');
-  const userEmailSpan = document.getElementById('userEmailSpan');
-  const retryAuthBtn = document.getElementById('retryAuthBtn');
-  const saveProfileBtn = document.getElementById('saveProfileBtn');
-  const instaInput = document.getElementById('instaInput');
-  const phoneInput = document.getElementById('phoneInput');
-  const bioInput = document.getElementById('bioInput');
-  const imageFileInput = document.getElementById('imageFile');
-  const uploadArea = document.getElementById('uploadArea');
-  const profilePreview = document.getElementById('profilePreview');
-  const profilesContainer = document.getElementById('profilesContainer');
-  const notifArea = document.getElementById('notifArea');
-  const profileStatus = document.getElementById('profileStatus');
-  const toastMsgDiv = document.getElementById('toastMsg');
 
   let currentUser = null;
-  let currentUserData = null;
-  let realtimeUnsub = null;
+  let currentUserProfile = null;
+  let allProfiles = [];
+  let currentIndex = 0;
+  let currentCard = null;
+  let startX = 0;
+  let isDragging = false;
+  let likedProfiles = new Set();
 
-  function showToast(msg, duration = 2500) {
-    toastMsgDiv.innerText = msg;
-    toastMsgDiv.style.display = 'block';
-    setTimeout(() => { toastMsgDiv.style.display = 'none'; }, duration);
+  // DOM Elements
+  const eliteModal = document.getElementById('eliteModal');
+  const agreeBtn = document.getElementById('agreeBtn');
+  const mainApp = document.getElementById('mainApp');
+  const profileModal = document.getElementById('profileModal');
+  const swipeContainer = document.getElementById('swipeContainer');
+  const likeBtn = document.getElementById('likeBtn');
+  const dislikeBtn = document.getElementById('dislikeBtn');
+  const userEmailBadge = document.getElementById('userEmailBadge');
+  const matchesList = document.getElementById('matchesList');
+  const matchCount = document.getElementById('matchCount');
+
+  // Show toast notification
+  function showNotification(message, isMatch = false) {
+    const toast = document.createElement('div');
+    toast.className = 'notification-toast';
+    toast.innerHTML = `<i class="fas fa-${isMatch ? 'heart' : 'bell'}"></i> ${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
   }
 
-  function isValidDomain(email) {
-    return email && email.endsWith('@bmsce.ac.in');
-  }
-
-  async function handleLogout() {
-    await signOut(auth);
-    showToast('Logged out from Circle');
-    resetUIForGuest();
-  }
-
-  function resetUIForGuest() {
-    mainContent.style.display = 'none';
-    domainErrorDiv.style.display = 'none';
-    loginBtn.style.display = 'inline-flex';
-    logoutBtn.style.display = 'none';
-    userEmailSpan.innerText = '';
-    if (realtimeUnsub) { realtimeUnsub(); realtimeUnsub = null; }
-    currentUser = null;
-    currentUserData = null;
-  }
-
-  async function fetchMyProfile(uid) {
-    const docRef = doc(db, "profiles", uid);
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      currentUserData = snap.data();
-      instaInput.value = currentUserData.instagram || '';
-      phoneInput.value = currentUserData.phone || '';
-      bioInput.value = currentUserData.bio || '';
-      if (currentUserData.photoURL) {
-        profilePreview.src = currentUserData.photoURL;
-        profilePreview.style.display = 'block';
-      } else {
-        profilePreview.style.display = 'none';
+  // Extract LinkedIn profile image (uses public profile URL to fetch image)
+  async function extractLinkedInImage(linkedinUrl) {
+    // LinkedIn profile images can be accessed via their public profile
+    // For demo, we'll use a placeholder but try to extract
+    if (!linkedinUrl) return null;
+    
+    try {
+      // Try to extract username from LinkedIn URL
+      const match = linkedinUrl.match(/linkedin\.com\/in\/([^\/?]+)/);
+      if (match) {
+        const username = match[1];
+        // Use LinkedIn's public profile image endpoint
+        return `https://www.linkedin.com/profile/display-photo/?username=${username}&trk=profile-photo`;
       }
-      profileStatus.innerText = '✅ Profile loaded';
-    } else {
-      currentUserData = null;
-      profilePreview.style.display = 'none';
-      profileStatus.innerText = '✨ Create your profile';
+    } catch(e) {}
+    return null;
+  }
+
+  // Create swipe card
+  function createCard(profile) {
+    const card = document.createElement('div');
+    card.className = 'swipe-card';
+    card.innerHTML = `
+      <img class="card-image" src="${profile.photoURL || 'https://via.placeholder.com/400x400/FFD700/1a1a2e?text=BMS+Elite'}" alt="${profile.displayName}" onerror="this.src='https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(profile.displayName || 'BMS')}'">
+      <div class="card-info">
+        <h3>${profile.displayName || 'BMS Student'}</h3>
+        <p>${profile.bio || '✨ New to the Circle. Say hi!'}</p>
+        <div class="social-badges">
+          ${profile.instagram ? `<span><i class="fab fa-instagram"></i> ${profile.instagram}</span>` : ''}
+          ${profile.phone ? `<span><i class="fas fa-phone"></i> ${profile.phone}</span>` : ''}
+        </div>
+      </div>
+    `;
+    return card;
+  }
+
+  // Load next profile
+  function loadNextProfile() {
+    if (!swipeContainer) return;
+    
+    while (currentIndex < allProfiles.length && likedProfiles.has(allProfiles[currentIndex]?.uid)) {
+      currentIndex++;
+    }
+    
+    if (currentIndex >= allProfiles.length) {
+      swipeContainer.innerHTML = `<div class="empty-state"><i class="fas fa-check-circle fa-3x"></i><p style="margin-top: 20px;">No more profiles! Check back later for new elite members.</p></div>`;
+      return;
+    }
+    
+    const profile = allProfiles[currentIndex];
+    swipeContainer.innerHTML = '';
+    currentCard = createCard(profile);
+    swipeContainer.appendChild(currentCard);
+    
+    // Add swipe gestures
+    const hammer = new Hammer.Manager(swipeContainer);
+    const swipe = new Hammer.Swipe();
+    hammer.add(swipe);
+    hammer.on('swipeleft', () => handleDislike());
+    hammer.on('swiperight', () => handleLike());
+  }
+
+  // Handle Like
+  async function handleLike() {
+    if (currentIndex >= allProfiles.length) return;
+    
+    const likedUser = allProfiles[currentIndex];
+    const isMatch = likedProfiles.has(likedUser.uid);
+    
+    if (!isMatch) {
+      // Add to likes
+      const userLikesRef = doc(db, "likes", currentUser.uid);
+      await setDoc(userLikesRef, { likedProfiles: arrayUnion(likedUser.uid) }, { merge: true });
+      
+      // Add notification
+      const targetNotifRef = doc(db, "notifications", likedUser.uid);
+      await setDoc(targetNotifRef, {
+        notifications: arrayUnion({
+          fromUid: currentUser.uid,
+          fromName: currentUserProfile?.displayName || currentUser.email,
+          timestamp: new Date().toISOString(),
+          read: false,
+          type: 'like'
+        })
+      }, { merge: true });
+      
+      likedProfiles.add(likedUser.uid);
+      showNotification(`You liked ${likedUser.displayName || 'someone'}!`, false);
+      
+      // Check if they liked you back (mutual like)
+      const theirLikes = await getDoc(doc(db, "likes", likedUser.uid));
+      if (theirLikes.exists() && theirLikes.data().likedProfiles?.includes(currentUser.uid)) {
+        // MATCH!
+        showMatchPopup(likedUser);
+        
+        // Add to matches
+        const matchesRef = doc(db, "matches", currentUser.uid);
+        await setDoc(matchesRef, { matches: arrayUnion(likedUser.uid) }, { merge: true });
+        const targetMatchesRef = doc(db, "matches", likedUser.uid);
+        await setDoc(targetMatchesRef, { matches: arrayUnion(currentUser.uid) }, { merge: true });
+        
+        loadMatches();
+      }
+    }
+    
+    currentIndex++;
+    loadNextProfile();
+  }
+
+  // Handle Dislike
+  async function handleDislike() {
+    if (currentIndex >= allProfiles.length) return;
+    currentIndex++;
+    loadNextProfile();
+  }
+
+  // Show match popup
+  function showMatchPopup(matchedUser) {
+    const popup = document.createElement('div');
+    popup.className = 'match-popup';
+    popup.innerHTML = `
+      <i class="fas fa-heart" style="font-size: 3rem;"></i>
+      <h2>IT'S A MATCH!</h2>
+      <p>You and ${matchedUser.displayName || 'someone'} liked each other</p>
+      <button onclick="this.parentElement.remove()" style="margin-top: 20px; padding: 10px 30px; border-radius: 40px; border: none; background: white; font-weight: bold;">Continue</button>
+    `;
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 3000);
+    showNotification(`✨ You matched with ${matchedUser.displayName}! ✨`, true);
+  }
+
+  // Load matches
+  async function loadMatches() {
+    const matchesRef = doc(db, "matches", currentUser.uid);
+    const matchesSnap = await getDoc(matchesRef);
+    const matchIds = matchesSnap.exists() ? matchesSnap.data().matches || [] : [];
+    matchCount.innerText = matchIds.length;
+    
+    matchesList.innerHTML = '';
+    for (const matchId of matchIds) {
+      const profileSnap = await getDoc(doc(db, "profiles", matchId));
+      if (profileSnap.exists()) {
+        const profile = profileSnap.data();
+        const div = document.createElement('div');
+        div.style.cssText = 'text-align: center; min-width: 80px;';
+        div.innerHTML = `
+          <img src="${profile.photoURL || 'https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&size=80&name=' + encodeURIComponent(profile.displayName || '')}" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid #FFD700;">
+          <p style="font-size: 0.7rem; margin-top: 4px;">${profile.displayName || ''}</p>
+        `;
+        matchesList.appendChild(div);
+      }
     }
   }
 
-  async function saveProfile() {
-    if (!currentUser) return;
-    const uid = currentUser.uid;
-    const instagram = instaInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const bio = bioInput.value.trim();
-    
-    let finalPhotoUrl = currentUserData?.photoURL || null;
-    const file = imageFileInput.files[0];
-    
-    if (file) {
-      try {
-        profileStatus.innerText = '📸 Uploading...';
-        const storageRef = ref(storage, `profile_images/${uid}_${Date.now()}`);
-        await uploadBytes(storageRef, file);
-        finalPhotoUrl = await getDownloadURL(storageRef);
-        profilePreview.src = finalPhotoUrl;
-        profilePreview.style.display = 'block';
-        showToast('Image uploaded!');
-      } catch (err) {
-        console.error("Upload error:", err);
-        profileStatus.innerText = '⚠️ Image upload failed. Check storage rules.';
-        showToast('Image upload failed. Make sure Storage is in test mode.');
-        return;
+  // Fetch all profiles
+  async function fetchProfiles() {
+    const q = query(collection(db, "profiles"));
+    const snapshot = await getDocs(q);
+    allProfiles = [];
+    snapshot.forEach(doc => {
+      if (doc.id !== currentUser.uid) {
+        allProfiles.push({ uid: doc.id, ...doc.data() });
       }
-    } else if (currentUserData?.photoURL) {
-      finalPhotoUrl = currentUserData.photoURL;
+    });
+    // Shuffle for fun
+    allProfiles = allProfiles.sort(() => Math.random() - 0.5);
+    currentIndex = 0;
+    loadNextProfile();
+  }
+
+  // Save user profile
+  async function saveUserProfile(linkedinUrl) {
+    let photoURL = null;
+    if (linkedinUrl) {
+      photoURL = await extractLinkedInImage(linkedinUrl);
+      if (!photoURL) {
+        photoURL = `https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(document.getElementById('displayName').value)}`;
+      }
     }
     
     const profileData = {
-      uid: uid,
+      uid: currentUser.uid,
       email: currentUser.email,
-      displayName: currentUser.displayName || currentUser.email.split('@')[0],
-      instagram: instagram,
-      phone: phone,
-      bio: bio,
-      photoURL: finalPhotoUrl || '',
+      displayName: document.getElementById('displayName').value,
+      bio: document.getElementById('bio').value,
+      instagram: document.getElementById('instagram').value,
+      phone: document.getElementById('phone').value,
+      photoURL: photoURL,
       updatedAt: new Date().toISOString()
     };
+    
+    await setDoc(doc(db, "profiles", currentUser.uid), profileData, { merge: true });
+    currentUserProfile = profileData;
+    profileModal.classList.add('hidden');
+    mainApp.classList.remove('hidden');
+    fetchProfiles();
+    loadMatches();
+    
+    showNotification('Profile saved! Start swiping! 🎉');
+  }
+
+  // Check if user has profile
+  async function checkUserProfile() {
+    const profileDoc = await getDoc(doc(db, "profiles", currentUser.uid));
+    if (!profileDoc.exists()) {
+      profileModal.classList.remove('hidden');
+    } else {
+      currentUserProfile = profileDoc.data();
+      mainApp.classList.remove('hidden');
+      fetchProfiles();
+      loadMatches();
+    }
+  }
+
+  // Login flow
+  async function loginWithGoogle() {
     try {
-      await setDoc(doc(db, "profiles", uid), profileData, { merge: true });
-      currentUserData = profileData;
-      profileStatus.innerText = '🎉 Profile published!';
-      showToast('Profile saved!');
-      imageFileInput.value = '';
-    } catch (err) {
-      console.error(err);
-      profileStatus.innerText = 'Error saving profile';
-      showToast('Save failed');
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email;
+      if (!email.endsWith('@bmsce.ac.in')) {
+        await signOut(auth);
+        showNotification('❌ Only @bmsce.ac.in emails allowed!', false);
+        return false;
+      }
+      currentUser = result.user;
+      userEmailBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${email.split('@')[0]}`;
+      await checkUserProfile();
+      return true;
+    } catch (error) {
+      console.error(error);
+      showNotification('Login failed. Try again!', false);
+      return false;
     }
   }
 
-  function renderProfiles(profilesList, currentUserId, currentUserLikesSet = new Set()) {
-    if (!profilesList.length) {
-      profilesContainer.innerHTML = `<div class="empty-state"><i class="fas fa-smile-wink"></i> No other profiles yet. Be the first!</div>`;
-      return;
-    }
-    let html = '';
-    for (let profile of profilesList) {
-      const uid = profile.uid;
-      const isLiked = currentUserLikesSet.has(uid);
-      const likeIconClass = isLiked ? 'fas fa-heart liked-active' : 'far fa-heart';
-      const photo = profile.photoURL ? profile.photoURL : `https://ui-avatars.com/api/?background=D97742&color=fff&bold=true&size=80&name=${encodeURIComponent(profile.displayName || 'BMS')}`;
-      html += `
-        <div class="profile-card" data-uid="${uid}">
-          <img class="profile-card-img" src="${photo}" onerror="this.src='https://ui-avatars.com/api/?background=6A8E6A&color=fff&size=70&name=U'">
-          <div class="profile-info" style="flex:1">
-            <h4>${escapeHtml(profile.displayName || 'BMS Student')}</h4>
-            <div class="bio-text">${escapeHtml(profile.bio?.substring(0, 120) || '✨ new to Circle')}</div>
-            <div class="social-links">
-              ${profile.instagram ? `<span><i class="fab fa-instagram"></i> ${escapeHtml(profile.instagram)}</span>` : ''}
-              ${profile.phone ? `<span><i class="fas fa-phone-alt"></i> ${escapeHtml(profile.phone)}</span>` : ''}
-            </div>
-          </div>
-          <button class="like-btn ${isLiked ? 'liked-active' : ''}" data-targetuid="${uid}">
-            <i class="${likeIconClass}"></i> <span style="font-size:0.7rem;">${isLiked ? 'Liked' : 'Like'}</span>
-          </button>
-        </div>
-      `;
-    }
-    profilesContainer.innerHTML = html;
-    document.querySelectorAll('.like-btn').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        const targetUid = btn.getAttribute('data-targetuid');
-        if (!targetUid || !currentUser) return;
-        const currentlyLiked = currentUserLikesSet.has(targetUid);
-        const userLikesRef = doc(db, "likes", currentUser.uid);
-        const targetNotifRef = doc(db, "notifications", targetUid);
-        
-        try {
-          if (!currentlyLiked) {
-            await setDoc(userLikesRef, { likedProfiles: arrayUnion(targetUid) }, { merge: true });
-            await setDoc(targetNotifRef, {
-              notifications: arrayUnion({
-                fromUid: currentUser.uid,
-                fromName: currentUser.displayName || currentUser.email,
-                timestamp: new Date().toISOString(),
-                read: false,
-                type: 'like'
-              })
-            }, { merge: true });
-            showToast(`❤️ Liked! They'll be notified`);
-          } else {
-            await updateDoc(userLikesRef, { likedProfiles: arrayRemove(targetUid) });
-            showToast(`💔 Unliked`);
-          }
-        } catch (err) {
-          console.error(err);
-          showToast('Action failed');
-        }
-      });
-    });
-  }
-
-  function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-
-  function subscribeProfilesAndLikes(userId) {
-    if (realtimeUnsub) realtimeUnsub();
-    const profilesQuery = query(collection(db, "profiles"), orderBy("updatedAt", "desc"));
-    const unsubProfiles = onSnapshot(profilesQuery, async (snapshot) => {
-      let allProfiles = [];
-      snapshot.forEach(docSnap => {
-        if (docSnap.id !== userId) {
-          allProfiles.push({ uid: docSnap.id, ...docSnap.data() });
-        }
-      });
-      let likedSet = new Set();
-      const likesDocRef = doc(db, "likes", userId);
-      const likesSnap = await getDoc(likesDocRef);
-      if (likesSnap.exists() && likesSnap.data().likedProfiles) {
-        likedSet = new Set(likesSnap.data().likedProfiles);
-      }
-      renderProfiles(allProfiles, userId, likedSet);
-      
-      const notifRef = doc(db, "notifications", userId);
-      const notifSnap = await getDoc(notifRef);
-      let unreadCount = 0;
-      if (notifSnap.exists() && notifSnap.data().notifications) {
-        unreadCount = notifSnap.data().notifications.filter(n => n.read === false).length;
-      }
-      notifArea.innerHTML = `<i class="fas fa-heart"></i> likes: ${unreadCount}`;
-      if (unreadCount > 0) {
-        notifArea.style.background = "linear-gradient(135deg, #FFE4E8, #FFF2E6)";
-        notifArea.style.cursor = "pointer";
-        notifArea.onclick = () => { markNotificationsAsRead(userId); };
-      } else {
-        notifArea.style.background = "linear-gradient(135deg, #FFF2E6, #FFE4E8)";
-        notifArea.onclick = null;
-      }
-    });
-    realtimeUnsub = unsubProfiles;
-  }
+  // Event Listeners
+  agreeBtn.addEventListener('click', () => {
+    eliteModal.style.display = 'none';
+    loginWithGoogle();
+  });
   
-  async function markNotificationsAsRead(userId) {
-    const notifRef = doc(db, "notifications", userId);
-    const snap = await getDoc(notifRef);
-    if (snap.exists() && snap.data().notifications) {
-      const updatedNotifs = snap.data().notifications.map(n => ({ ...n, read: true }));
-      await setDoc(notifRef, { notifications: updatedNotifs }, { merge: true });
-      showToast("✨ Notifications cleared");
-      notifArea.innerHTML = `<i class="fas fa-heart"></i> likes: 0`;
-    }
-  }
+  likeBtn.addEventListener('click', handleLike);
+  dislikeBtn.addEventListener('click', handleDislike);
+  document.getElementById('saveProfileBtn').addEventListener('click', () => {
+    saveUserProfile(document.getElementById('linkedinUrl').value);
+  });
 
+  // Check auth state
   onAuthStateChanged(auth, async (user) => {
-    if (user && isValidDomain(user.email)) {
+    if (user && user.email?.endsWith('@bmsce.ac.in')) {
       currentUser = user;
-      userEmailSpan.innerText = user.email;
-      loginBtn.style.display = 'none';
-      logoutBtn.style.display = 'inline-flex';
-      domainErrorDiv.style.display = 'none';
-      mainContent.style.display = 'block';
-      await fetchMyProfile(user.uid);
-      subscribeProfilesAndLikes(user.uid);
-    } 
-    else if (user && !isValidDomain(user.email)) {
+      userEmailBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${user.email.split('@')[0]}`;
+      await checkUserProfile();
+    } else if (user) {
       await signOut(auth);
-      resetUIForGuest();
-      domainErrorDiv.style.display = 'block';
-      mainContent.style.display = 'none';
-      showToast('Only @bmsce.ac.in emails allowed', 3000);
-    } 
-    else {
-      resetUIForGuest();
-    }
-  });
-
-  loginBtn.addEventListener('click', () => {
-    signInWithPopup(auth, provider).catch(err => {
-      console.error(err);
-      showToast('Login failed: ' + err.message);
-    });
-  });
-  logoutBtn.addEventListener('click', handleLogout);
-  retryAuthBtn.addEventListener('click', () => {
-    signInWithPopup(auth, provider);
-  });
-  saveProfileBtn.addEventListener('click', saveProfile);
-  
-  uploadArea.addEventListener('click', () => imageFileInput.click());
-  imageFileInput.addEventListener('change', (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        profilePreview.src = ev.target.result;
-        profilePreview.style.display = 'block';
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-  
-  uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.style.background = '#FFF2E6'; });
-  uploadArea.addEventListener('dragleave', () => { uploadArea.style.background = '#FFF9F5'; });
-  uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.style.background = '#FFF9F5';
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      imageFileInput.files = e.dataTransfer.files;
-      const reader = new FileReader();
-      reader.onload = (ev) => { profilePreview.src = ev.target.result; profilePreview.style.display = 'block'; };
-      reader.readAsDataURL(file);
+      eliteModal.style.display = 'flex';
     }
   });
 </script>
