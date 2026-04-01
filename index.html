@@ -1,121 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BMS Match 🩸</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+<title>BMSCE Match</title>
 
 <style>
 body {
-  margin:0;
-  font-family:Montserrat;
-  background:#0b0b0f;
-  color:#fff;
-}
-
-/* Modal */
-.modal {
-  position:fixed;
-  inset:0;
-  background:#000000e6;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:1000;
-}
-
-.modal-card {
-  background:#15151c;
-  padding:20px;
-  width:90%;
-  max-width:400px;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:10px;
+  margin: 0;
+  font-family: Arial;
+  background: #0a0a0a;
+  color: white;
+  text-align: center;
 }
 
 button {
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  background:#ff0033;
-  color:white;
-  cursor:pointer;
+  padding: 12px;
+  margin: 10px;
+  background: crimson;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 
-input,textarea {
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  background:#1e1e2a;
-  border:none;
-  color:white;
+input {
+  padding: 10px;
+  width: 80%;
+  margin: 5px;
 }
 
-/* App */
-.container { padding:20px; }
+.hidden { display: none; }
 
 .card {
-  background:#1a1a25;
-  padding:15px;
-  border-radius:10px;
-  margin-bottom:20px;
+  background: #111;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
 }
-
-.actions button {
-  width:45%;
-}
-
-.hidden { display:none; }
 </style>
 </head>
 
 <body>
 
 <!-- LOGIN -->
-<div id="loginModal" class="modal">
-  <div class="modal-card">
-    <h2>BMS Match 🩸</h2>
-    <p>Only @bmsce.ac.in allowed</p>
-    <button id="loginBtn">Sign in with Google</button>
-  </div>
+<div id="login">
+  <h2>BMSCE Match 💋</h2>
+  <button id="loginBtn">Login with Google</button>
 </div>
 
 <!-- PROFILE -->
-<div id="profileModal" class="modal hidden">
-  <div class="modal-card">
-    <h3>Create Profile</h3>
-    <input id="name" placeholder="Name">
-    <textarea id="bio" placeholder="Bio"></textarea>
-    <input id="insta" placeholder="Instagram">
-    <button id="saveProfile">Save</button>
-  </div>
+<div id="profile" class="hidden">
+  <h3>Create Profile</h3>
+  <input id="name" placeholder="Name"><br>
+  <input id="interests" placeholder="Interests (comma separated)"><br>
+  <input id="bio" placeholder="Bio"><br>
+  <button id="save">Save</button>
 </div>
 
 <!-- APP -->
-<div id="app" class="container hidden">
-  <h2 id="userEmail"></h2>
-
+<div id="app" class="hidden">
   <div id="card"></div>
-
-  <div class="actions">
-    <button id="like">❤️ Like</button>
-    <button id="skip">❌ Skip</button>
-  </div>
+  <button id="like">❤️</button>
+  <button id="dislike">❌</button>
+  <h3>Your Matches</h3>
+  <div id="matches"></div>
 </div>
 
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "YOUR_KEY",
+  apiKey: "YOUR_API_KEY",
   authDomain: "bms-circle.firebaseapp.com",
-  projectId: "bms-circle",
+  projectId: "bms-circle"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -123,82 +82,151 @@ const auth = getAuth();
 const db = getFirestore();
 
 const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
 
-const loginModal = document.getElementById("loginModal");
-const profileModal = document.getElementById("profileModal");
-const appDiv = document.getElementById("app");
+let user, profiles = [], index = 0;
 
-let user, profiles=[], index=0;
-
+/* LOGIN */
 document.getElementById("loginBtn").onclick = async () => {
-  try {
-    const res = await signInWithPopup(auth, provider);
-    if(!res.user.email.endsWith("@bmsce.ac.in")){
-      alert("Only BMSCE allowed");
-      return;
-    }
-  } catch(e){
-    alert(e.message);
+  const res = await signInWithPopup(auth, provider);
+
+  if (!res.user.email.endsWith("@bmsce.ac.in")) {
+    alert("Use BMSCE email");
+    return;
   }
 };
 
-onAuthStateChanged(auth, async (u)=>{
-  if(!u) return;
-  user=u;
+/* AUTH */
+onAuthStateChanged(auth, async (u) => {
+  if (!u) return;
 
-  document.getElementById("userEmail").innerText=u.email;
+  user = u;
+  document.getElementById("login").classList.add("hidden");
 
-  loginModal.classList.add("hidden");
+  const docSnap = await getDoc(doc(db, "users", user.uid));
 
-  const docSnap = await getDoc(doc(db,"profiles",u.uid));
-
-  if(!docSnap.exists()){
-    profileModal.classList.remove("hidden");
+  if (!docSnap.exists()) {
+    document.getElementById("profile").classList.remove("hidden");
   } else {
     startApp();
   }
 });
 
-document.getElementById("saveProfile").onclick = async ()=>{
+/* SAVE PROFILE */
+document.getElementById("save").onclick = async () => {
   const name = document.getElementById("name").value;
+  const interests = document.getElementById("interests").value.split(",");
   const bio = document.getElementById("bio").value;
 
-  await setDoc(doc(db,"profiles",user.uid),{
-    name,bio
+  await setDoc(doc(db, "users", user.uid), {
+    name,
+    interests,
+    bio,
+    likes: [],
+    matches: []
   });
 
-  profileModal.classList.add("hidden");
+  document.getElementById("profile").classList.add("hidden");
   startApp();
 };
 
-async function startApp(){
-  appDiv.classList.remove("hidden");
+/* START APP */
+async function startApp() {
+  document.getElementById("app").classList.remove("hidden");
 
-  const snap = await getDocs(collection(db,"profiles"));
-  profiles = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.id!==user.uid);
+  const snap = await getDocs(collection(db, "users"));
+  profiles = [];
 
+  snap.forEach(d => {
+    if (d.id !== user.uid) profiles.push({ id: d.id, ...d.data() });
+  });
+
+  sortProfiles();
   showCard();
+  loadMatches();
 }
 
-function showCard(){
-  if(index>=profiles.length){
-    document.getElementById("card").innerHTML="No more users";
+/* INTEREST MATCHING */
+function sortProfiles() {
+  profiles.sort((a, b) => {
+    const scoreA = common(a.interests);
+    const scoreB = common(b.interests);
+    return scoreB - scoreA + Math.random();
+  });
+}
+
+function common(interests) {
+  const my = document.getElementById("interests").value.split(",");
+  return interests.filter(i => my.includes(i)).length;
+}
+
+/* CARD */
+function showCard() {
+  if (index >= profiles.length) {
+    document.getElementById("card").innerHTML = "No more people 😭";
     return;
   }
 
   const p = profiles[index];
-  document.getElementById("card").innerHTML=`
+
+  document.getElementById("card").innerHTML = `
     <div class="card">
       <h3>${p.name}</h3>
       <p>${p.bio}</p>
+      <p><b>Interests:</b> ${p.interests.join(", ")}</p>
     </div>
   `;
 }
 
-document.getElementById("like").onclick=()=>{ index++; showCard(); };
-document.getElementById("skip").onclick=()=>{ index++; showCard(); };
-</script>
+/* LIKE */
+document.getElementById("like").onclick = async () => {
+  const target = profiles[index];
 
+  const myRef = doc(db, "users", user.uid);
+  await updateDoc(myRef, {
+    likes: arrayUnion(target.id)
+  });
+
+  const targetDoc = await getDoc(doc(db, "users", target.id));
+
+  if (targetDoc.data().likes.includes(user.uid)) {
+    alert("💘 MATCH!");
+
+    await updateDoc(myRef, {
+      matches: arrayUnion(target.id)
+    });
+
+    await updateDoc(doc(db, "users", target.id), {
+      matches: arrayUnion(user.uid)
+    });
+
+    loadMatches();
+  }
+
+  index++;
+  showCard();
+};
+
+/* DISLIKE */
+document.getElementById("dislike").onclick = () => {
+  index++;
+  showCard();
+};
+
+/* LOAD MATCHES */
+async function loadMatches() {
+  const docSnap = await getDoc(doc(db, "users", user.uid));
+  const matches = docSnap.data().matches || [];
+
+  let html = "";
+
+  for (let id of matches) {
+    const m = await getDoc(doc(db, "users", id));
+    html += `<p>💘 ${m.data().name}</p>`;
+  }
+
+  document.getElementById("matches").innerHTML = html;
+}
+
+</script>
 </body>
 </html>
