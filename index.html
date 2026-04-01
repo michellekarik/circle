@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Elite Circle | BMSce Only</title>
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Hammer.js for swipe gestures -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
   <style>
     * {
@@ -24,7 +22,6 @@
       color: #fff;
     }
 
-    /* Entrance Modal - Elite Club */
     .elite-modal {
       position: fixed;
       top: 0;
@@ -38,7 +35,6 @@
       align-items: center;
       justify-content: center;
       animation: fadeIn 0.5s ease;
-      z-index: 10000;
     }
 
     .elite-card {
@@ -50,19 +46,13 @@
       margin: 20px;
       text-align: center;
       border: 2px solid rgba(255, 215, 0, 0.5);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 215, 0, 0.2);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
     @keyframes slideUp {
-      from {
-        transform: translateY(50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     @keyframes fadeIn {
@@ -135,7 +125,6 @@
       box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
     }
 
-    /* Main App Container */
     .app-wrapper {
       max-width: 600px;
       margin: 0 auto;
@@ -144,7 +133,6 @@
       z-index: 2;
     }
 
-    /* Navbar */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -171,7 +159,6 @@
       backdrop-filter: blur(10px);
     }
 
-    /* Swipe Card Container */
     .swipe-container {
       position: relative;
       height: 65vh;
@@ -233,7 +220,6 @@
       font-size: 0.8rem;
     }
 
-    /* Action Buttons */
     .action-buttons {
       display: flex;
       justify-content: center;
@@ -268,7 +254,6 @@
       box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
     }
 
-    /* Match Notification */
     .match-popup {
       position: fixed;
       top: 50%;
@@ -284,16 +269,9 @@
     }
 
     @keyframes bounceIn {
-      0% {
-        transform: translate(-50%, -50%) scale(0);
-        opacity: 0;
-      }
-      80% {
-        transform: translate(-50%, -50%) scale(1.1);
-      }
-      100% {
-        transform: translate(-50%, -50%) scale(1);
-      }
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      80% { transform: translate(-50%, -50%) scale(1.1); }
+      100% { transform: translate(-50%, -50%) scale(1); }
     }
 
     .match-popup h2 {
@@ -301,7 +279,6 @@
       margin: 20px 0;
     }
 
-    /* Profile Form Modal */
     .profile-modal {
       position: fixed;
       top: 0;
@@ -336,7 +313,10 @@
       color: white;
     }
 
-    /* Notifications */
+    .profile-form-card input::placeholder, .profile-form-card textarea::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
     .notification-toast {
       position: fixed;
       top: 20px;
@@ -349,14 +329,8 @@
     }
 
     @keyframes slideInRight {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
     .empty-state {
@@ -366,20 +340,46 @@
       border-radius: 32px;
     }
 
-    /* Hide elements */
     .hidden {
       display: none;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error-msg {
+      color: #ff6b6b;
+      font-size: 0.8rem;
+      margin-top: 8px;
+    }
+
+    .logout-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 40px;
+      color: white;
+      cursor: pointer;
+      margin-left: 12px;
     }
   </style>
 </head>
 <body>
 
-<!-- Elite Club Entrance Modal -->
 <div id="eliteModal" class="elite-modal">
   <div class="elite-card">
-    <div class="elite-icon">
-      <i class="fas fa-crown"></i>
-    </div>
+    <div class="elite-icon"><i class="fas fa-crown"></i></div>
     <h1>ELITE CIRCLE</h1>
     <p><strong>BMS College of Engineering</strong> — where the brightest minds connect.</p>
     <div class="feature-list">
@@ -388,23 +388,25 @@
       <li><i class="fas fa-bell"></i> Real-time notifications when someone likes you</li>
       <li><i class="fab fa-linkedin"></i> Auto-import your LinkedIn profile image</li>
     </div>
-    <p style="font-size: 0.85rem; opacity: 0.6;">By joining, you agree to share your profile with fellow BMSce students. Your email stays private.</p>
-    <button class="agree-btn" id="agreeBtn"><i class="fas fa-gem"></i> I'M ELITE — LET ME IN</button>
+    <p style="font-size: 0.85rem; opacity: 0.6;">By joining, you agree to share your profile with fellow BMSce students.</p>
+    <button class="agree-btn" id="agreeBtn"><i class="fas fa-gem"></i> CONTINUE WITH GOOGLE</button>
+    <div id="loginError" class="error-msg" style="margin-top: 16px; display: none;"></div>
   </div>
 </div>
 
-<!-- Main App (hidden until login) -->
 <div id="mainApp" class="app-wrapper hidden">
   <div class="navbar">
     <div class="logo"><i class="fas fa-crown"></i> ELITE CIRCLE</div>
-    <div class="badge" id="userEmailBadge"></div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="badge" id="userEmailBadge"></div>
+      <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
   </div>
 
-  <!-- Swipe Area -->
   <div id="swipeArea">
     <div class="swipe-container" id="swipeContainer">
       <div class="empty-state">
-        <i class="fas fa-spinner fa-pulse fa-3x"></i>
+        <div class="loading-spinner"></div>
         <p style="margin-top: 20px;">Loading elite members...</p>
       </div>
     </div>
@@ -414,28 +416,25 @@
     </div>
   </div>
 
-  <!-- My Matches Section -->
   <div style="margin-top: 32px;">
     <h3><i class="fas fa-star"></i> Your Matches <span id="matchCount">0</span></h3>
     <div id="matchesList" style="display: flex; gap: 12px; overflow-x: auto; padding: 16px 0;"></div>
   </div>
 </div>
 
-<!-- Profile Setup Modal -->
 <div id="profileModal" class="profile-modal hidden">
   <div class="profile-form-card">
     <h2 style="margin-bottom: 24px;">✨ Complete Your Elite Profile</h2>
-    <input type="text" id="displayName" placeholder="Your Name" />
+    <input type="text" id="displayName" placeholder="Your Full Name" />
     <input type="text" id="linkedinUrl" placeholder="LinkedIn Profile URL (for photo)" />
     <textarea id="bio" rows="3" placeholder="Tell us about yourself... your vibe, interests, what you're looking for"></textarea>
     <input type="text" id="instagram" placeholder="Instagram username" />
     <input type="text" id="phone" placeholder="Phone (optional)" />
-    <button id="saveProfileBtn" style="width: 100%; padding: 14px; border-radius: 28px; background: linear-gradient(135deg, #FFD700, #FF6B6B); border: none; font-weight: bold; margin-top: 20px;">Save & Start Swiping</button>
+    <button id="saveProfileBtn" style="width: 100%; padding: 14px; border-radius: 28px; background: linear-gradient(135deg, #FFD700, #FF6B6B); border: none; font-weight: bold; margin-top: 20px; cursor: pointer;">Save & Start Swiping</button>
   </div>
 </div>
 
 <script type="module">
-  // Firebase Config (yours)
   const firebaseConfig = {
     apiKey: "AIzaSyBqEo2MZeNUvBS8Zk4-l3Re2UcOQBb81bQ",
     authDomain: "bms-circle.firebaseapp.com",
@@ -447,25 +446,23 @@
 
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, getDocs, updateDoc, arrayUnion, arrayRemove, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
   const storage = getStorage(app);
   const provider = new GoogleAuthProvider();
+  
+  provider.setCustomParameters({ prompt: 'select_account' });
 
   let currentUser = null;
   let currentUserProfile = null;
   let allProfiles = [];
   let currentIndex = 0;
-  let currentCard = null;
-  let startX = 0;
-  let isDragging = false;
   let likedProfiles = new Set();
 
-  // DOM Elements
   const eliteModal = document.getElementById('eliteModal');
   const agreeBtn = document.getElementById('agreeBtn');
   const mainApp = document.getElementById('mainApp');
@@ -474,10 +471,11 @@
   const likeBtn = document.getElementById('likeBtn');
   const dislikeBtn = document.getElementById('dislikeBtn');
   const userEmailBadge = document.getElementById('userEmailBadge');
+  const logoutBtn = document.getElementById('logoutBtn');
   const matchesList = document.getElementById('matchesList');
   const matchCount = document.getElementById('matchCount');
+  const loginError = document.getElementById('loginError');
 
-  // Show toast notification
   function showNotification(message, isMatch = false) {
     const toast = document.createElement('div');
     toast.className = 'notification-toast';
@@ -486,43 +484,24 @@
     setTimeout(() => toast.remove(), 3000);
   }
 
-  // Extract LinkedIn profile image (uses public profile URL to fetch image)
-  async function extractLinkedInImage(linkedinUrl) {
-    // LinkedIn profile images can be accessed via their public profile
-    // For demo, we'll use a placeholder but try to extract
-    if (!linkedinUrl) return null;
-    
-    try {
-      // Try to extract username from LinkedIn URL
-      const match = linkedinUrl.match(/linkedin\.com\/in\/([^\/?]+)/);
-      if (match) {
-        const username = match[1];
-        // Use LinkedIn's public profile image endpoint
-        return `https://www.linkedin.com/profile/display-photo/?username=${username}&trk=profile-photo`;
-      }
-    } catch(e) {}
-    return null;
-  }
-
-  // Create swipe card
   function createCard(profile) {
     const card = document.createElement('div');
     card.className = 'swipe-card';
+    const photoUrl = profile.photoURL || `https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(profile.displayName || 'BMS')}`;
     card.innerHTML = `
-      <img class="card-image" src="${profile.photoURL || 'https://via.placeholder.com/400x400/FFD700/1a1a2e?text=BMS+Elite'}" alt="${profile.displayName}" onerror="this.src='https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(profile.displayName || 'BMS')}'">
+      <img class="card-image" src="${photoUrl}" alt="${profile.displayName}" onerror="this.src='https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(profile.displayName || 'BMS')}'">
       <div class="card-info">
-        <h3>${profile.displayName || 'BMS Student'}</h3>
-        <p>${profile.bio || '✨ New to the Circle. Say hi!'}</p>
+        <h3>${escapeHtml(profile.displayName || 'BMS Student')}</h3>
+        <p>${escapeHtml(profile.bio || '✨ New to the Circle. Say hi!')}</p>
         <div class="social-badges">
-          ${profile.instagram ? `<span><i class="fab fa-instagram"></i> ${profile.instagram}</span>` : ''}
-          ${profile.phone ? `<span><i class="fas fa-phone"></i> ${profile.phone}</span>` : ''}
+          ${profile.instagram ? `<span><i class="fab fa-instagram"></i> ${escapeHtml(profile.instagram)}</span>` : ''}
+          ${profile.phone ? `<span><i class="fas fa-phone"></i> ${escapeHtml(profile.phone)}</span>` : ''}
         </div>
       </div>
     `;
     return card;
   }
 
-  // Load next profile
   function loadNextProfile() {
     if (!swipeContainer) return;
     
@@ -537,30 +516,27 @@
     
     const profile = allProfiles[currentIndex];
     swipeContainer.innerHTML = '';
-    currentCard = createCard(profile);
-    swipeContainer.appendChild(currentCard);
+    const newCard = createCard(profile);
+    swipeContainer.appendChild(newCard);
     
     // Add swipe gestures
     const hammer = new Hammer.Manager(swipeContainer);
     const swipe = new Hammer.Swipe();
     hammer.add(swipe);
+    hammer.off('swipeleft swiperight');
     hammer.on('swipeleft', () => handleDislike());
     hammer.on('swiperight', () => handleLike());
   }
 
-  // Handle Like
   async function handleLike() {
     if (currentIndex >= allProfiles.length) return;
     
     const likedUser = allProfiles[currentIndex];
-    const isMatch = likedProfiles.has(likedUser.uid);
     
-    if (!isMatch) {
-      // Add to likes
+    if (!likedProfiles.has(likedUser.uid)) {
       const userLikesRef = doc(db, "likes", currentUser.uid);
       await setDoc(userLikesRef, { likedProfiles: arrayUnion(likedUser.uid) }, { merge: true });
       
-      // Add notification
       const targetNotifRef = doc(db, "notifications", likedUser.uid);
       await setDoc(targetNotifRef, {
         notifications: arrayUnion({
@@ -573,20 +549,15 @@
       }, { merge: true });
       
       likedProfiles.add(likedUser.uid);
-      showNotification(`You liked ${likedUser.displayName || 'someone'}!`, false);
+      showNotification(`You liked ${likedUser.displayName || 'someone'}!`);
       
-      // Check if they liked you back (mutual like)
       const theirLikes = await getDoc(doc(db, "likes", likedUser.uid));
       if (theirLikes.exists() && theirLikes.data().likedProfiles?.includes(currentUser.uid)) {
-        // MATCH!
         showMatchPopup(likedUser);
-        
-        // Add to matches
         const matchesRef = doc(db, "matches", currentUser.uid);
         await setDoc(matchesRef, { matches: arrayUnion(likedUser.uid) }, { merge: true });
         const targetMatchesRef = doc(db, "matches", likedUser.uid);
         await setDoc(targetMatchesRef, { matches: arrayUnion(currentUser.uid) }, { merge: true });
-        
         loadMatches();
       }
     }
@@ -595,14 +566,12 @@
     loadNextProfile();
   }
 
-  // Handle Dislike
   async function handleDislike() {
     if (currentIndex >= allProfiles.length) return;
     currentIndex++;
     loadNextProfile();
   }
 
-  // Show match popup
   function showMatchPopup(matchedUser) {
     const popup = document.createElement('div');
     popup.className = 'match-popup';
@@ -610,14 +579,13 @@
       <i class="fas fa-heart" style="font-size: 3rem;"></i>
       <h2>IT'S A MATCH!</h2>
       <p>You and ${matchedUser.displayName || 'someone'} liked each other</p>
-      <button onclick="this.parentElement.remove()" style="margin-top: 20px; padding: 10px 30px; border-radius: 40px; border: none; background: white; font-weight: bold;">Continue</button>
+      <button onclick="this.parentElement.remove()" style="margin-top: 20px; padding: 10px 30px; border-radius: 40px; border: none; background: white; font-weight: bold; cursor: pointer;">Continue</button>
     `;
     document.body.appendChild(popup);
-    setTimeout(() => popup.remove(), 3000);
+    setTimeout(() => popup.remove(), 4000);
     showNotification(`✨ You matched with ${matchedUser.displayName}! ✨`, true);
   }
 
-  // Load matches
   async function loadMatches() {
     const matchesRef = doc(db, "matches", currentUser.uid);
     const matchesSnap = await getDoc(matchesRef);
@@ -630,17 +598,17 @@
       if (profileSnap.exists()) {
         const profile = profileSnap.data();
         const div = document.createElement('div');
-        div.style.cssText = 'text-align: center; min-width: 80px;';
+        div.style.cssText = 'text-align: center; min-width: 80px; cursor: pointer;';
+        div.onclick = () => showNotification(`${profile.displayName}: ${profile.bio || 'No bio yet'}`);
         div.innerHTML = `
-          <img src="${profile.photoURL || 'https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&size=80&name=' + encodeURIComponent(profile.displayName || '')}" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid #FFD700;">
-          <p style="font-size: 0.7rem; margin-top: 4px;">${profile.displayName || ''}</p>
+          <img src="${profile.photoURL || `https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&size=80&name=${encodeURIComponent(profile.displayName || '')}`}" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid #FFD700; object-fit: cover;">
+          <p style="font-size: 0.7rem; margin-top: 4px;">${escapeHtml(profile.displayName || '')}</p>
         `;
         matchesList.appendChild(div);
       }
     }
   }
 
-  // Fetch all profiles
   async function fetchProfiles() {
     const q = query(collection(db, "profiles"));
     const snapshot = await getDocs(q);
@@ -650,29 +618,42 @@
         allProfiles.push({ uid: doc.id, ...doc.data() });
       }
     });
-    // Shuffle for fun
     allProfiles = allProfiles.sort(() => Math.random() - 0.5);
     currentIndex = 0;
+    
+    // Load liked profiles set
+    const likesDoc = await getDoc(doc(db, "likes", currentUser.uid));
+    if (likesDoc.exists() && likesDoc.data().likedProfiles) {
+      likedProfiles = new Set(likesDoc.data().likedProfiles);
+    }
+    
     loadNextProfile();
   }
 
-  // Save user profile
-  async function saveUserProfile(linkedinUrl) {
-    let photoURL = null;
+  async function saveUserProfile() {
+    const displayName = document.getElementById('displayName').value.trim();
+    if (!displayName) {
+      showNotification('Please enter your name!');
+      return;
+    }
+    
+    let photoURL = `https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(displayName)}`;
+    const linkedinUrl = document.getElementById('linkedinUrl').value.trim();
+    
     if (linkedinUrl) {
-      photoURL = await extractLinkedInImage(linkedinUrl);
-      if (!photoURL) {
-        photoURL = `https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(document.getElementById('displayName').value)}`;
+      const match = linkedinUrl.match(/linkedin\.com\/in\/([^\/?]+)/);
+      if (match) {
+        photoURL = `https://ui-avatars.com/api/?background=FFD700&color=1a1a2e&bold=true&size=200&name=${encodeURIComponent(displayName)}`;
       }
     }
     
     const profileData = {
       uid: currentUser.uid,
       email: currentUser.email,
-      displayName: document.getElementById('displayName').value,
-      bio: document.getElementById('bio').value,
-      instagram: document.getElementById('instagram').value,
-      phone: document.getElementById('phone').value,
+      displayName: displayName,
+      bio: document.getElementById('bio').value.trim() || "✨ Proud BMSce student!",
+      instagram: document.getElementById('instagram').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
       photoURL: photoURL,
       updatedAt: new Date().toISOString()
     };
@@ -681,13 +662,11 @@
     currentUserProfile = profileData;
     profileModal.classList.add('hidden');
     mainApp.classList.remove('hidden');
-    fetchProfiles();
-    loadMatches();
-    
+    await fetchProfiles();
+    await loadMatches();
     showNotification('Profile saved! Start swiping! 🎉');
   }
 
-  // Check if user has profile
   async function checkUserProfile() {
     const profileDoc = await getDoc(doc(db, "profiles", currentUser.uid));
     if (!profileDoc.exists()) {
@@ -695,55 +674,73 @@
     } else {
       currentUserProfile = profileDoc.data();
       mainApp.classList.remove('hidden');
-      fetchProfiles();
-      loadMatches();
+      await fetchProfiles();
+      await loadMatches();
     }
   }
 
-  // Login flow
   async function loginWithGoogle() {
     try {
+      loginError.style.display = 'none';
       const result = await signInWithPopup(auth, provider);
       const email = result.user.email;
+      
       if (!email.endsWith('@bmsce.ac.in')) {
         await signOut(auth);
-        showNotification('❌ Only @bmsce.ac.in emails allowed!', false);
+        loginError.innerText = '❌ Only @bmsce.ac.in email addresses are allowed!';
+        loginError.style.display = 'block';
         return false;
       }
+      
       currentUser = result.user;
       userEmailBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${email.split('@')[0]}`;
+      eliteModal.style.display = 'none';
       await checkUserProfile();
       return true;
     } catch (error) {
-      console.error(error);
-      showNotification('Login failed. Try again!', false);
+      console.error('Login error:', error);
+      loginError.innerText = `Login failed: ${error.message || 'Please check Firebase Authentication settings'}`;
+      loginError.style.display = 'block';
       return false;
     }
   }
 
-  // Event Listeners
-  agreeBtn.addEventListener('click', () => {
-    eliteModal.style.display = 'none';
-    loginWithGoogle();
-  });
-  
+  async function handleLogout() {
+    await signOut(auth);
+    currentUser = null;
+    currentUserProfile = null;
+    mainApp.classList.add('hidden');
+    profileModal.classList.add('hidden');
+    eliteModal.style.display = 'flex';
+    showNotification('Logged out successfully');
+  }
+
+  agreeBtn.addEventListener('click', () => loginWithGoogle());
   likeBtn.addEventListener('click', handleLike);
   dislikeBtn.addEventListener('click', handleDislike);
-  document.getElementById('saveProfileBtn').addEventListener('click', () => {
-    saveUserProfile(document.getElementById('linkedinUrl').value);
-  });
+  logoutBtn.addEventListener('click', handleLogout);
+  document.getElementById('saveProfileBtn').addEventListener('click', saveUserProfile);
 
-  // Check auth state
-  onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged(auth, (user) => {
     if (user && user.email?.endsWith('@bmsce.ac.in')) {
       currentUser = user;
       userEmailBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${user.email.split('@')[0]}`;
-      await checkUserProfile();
+      eliteModal.style.display = 'none';
+      checkUserProfile();
     } else if (user) {
-      await signOut(auth);
-      eliteModal.style.display = 'flex';
+      signOut(auth);
     }
   });
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
 </script>
 </body>
 </html>
