@@ -1,232 +1,844 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BMSCE Match</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Masquerade | BMSce Elite Circle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0a0a0a;
-  color: white;
-  text-align: center;
-}
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #0a0a0f;
+      min-height: 100vh;
+      color: #e8e6e3;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-button {
-  padding: 12px;
-  margin: 10px;
-  background: crimson;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
+    /* Hide main app initially while loading */
+    body.loading #mainApp {
+      display: none;
+    }
 
-input {
-  padding: 10px;
-  width: 80%;
-  margin: 5px;
-}
+    /* Elegant gradient overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, rgba(87, 58, 78, 0.3) 0%, rgba(10, 10, 15, 0.95) 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
 
-.hidden { display: none; }
+    /* Venetian mask particles - elegant floating masks */
+    .masquerade-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      font-size: 1.2rem;
+      opacity: 0.08;
+      animation: floatMask 20s infinite linear;
+      filter: blur(0.5px);
+    }
 
-.card {
-  background: #111;
-  padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
-}
-</style>
+    @keyframes floatMask {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.08;
+      }
+      90% {
+        opacity: 0.08;
+      }
+      100% {
+        transform: translateY(-20vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* MODAL STYLES - Elegant Masquerade Theme */
+    .modal-masquerade {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 5, 8, 0.98);
+      backdrop-filter: blur(12px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .modal-card-elegant {
+      background: linear-gradient(135deg, rgba(25, 20, 35, 0.95), rgba(15, 12, 25, 0.98));
+      backdrop-filter: blur(20px);
+      border-radius: 4px;
+      padding: 48px 40px;
+      max-width: 550px;
+      width: 100%;
+      text-align: center;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.1);
+      animation: modalEntrance 0.6s ease-out;
+    }
+
+    @keyframes modalEntrance {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .mask-icon {
+      font-size: 4rem;
+      color: #d4af37;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+    }
+
+    .modal-card-elegant h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #d4af37;
+      margin-bottom: 16px;
+    }
+
+    .modal-card-elegant .subtitle {
+      color: rgba(232, 230, 227, 0.7);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+      border-top: 1px solid rgba(212, 175, 55, 0.3);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      display: inline-block;
+      padding: 8px 20px;
+    }
+
+    .invitation-text {
+      margin: 24px 0;
+      line-height: 1.8;
+      color: rgba(232, 230, 227, 0.85);
+      font-size: 0.95rem;
+    }
+
+    .rules-list {
+      text-align: left;
+      margin: 28px 0;
+      padding: 0 20px;
+    }
+
+    .rules-list li {
+      margin: 14px 0;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #e8e6e3;
+      font-size: 0.9rem;
+    }
+
+    .rules-list li i {
+      width: 24px;
+      color: #d4af37;
+    }
+
+    .privacy-section {
+      background: rgba(212, 175, 55, 0.08);
+      border-left: 2px solid #d4af37;
+      padding: 16px 20px;
+      margin: 24px 0;
+      text-align: left;
+      font-size: 0.75rem;
+      color: rgba(232, 230, 227, 0.6);
+      line-height: 1.5;
+    }
+
+    .elegant-btn {
+      background: transparent;
+      border: 1px solid #d4af37;
+      padding: 14px 32px;
+      border-radius: 0;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+      color: #d4af37;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .elegant-btn:hover {
+      background: #d4af37;
+      color: #0a0a0f;
+      box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Main App Styles - Masquerade Theme */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      margin-bottom: 30px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-area i {
+      font-size: 1.8rem;
+      color: #d4af37;
+    }
+
+    .logo-area h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+
+    .user-tag {
+      background: rgba(212, 175, 55, 0.1);
+      padding: 6px 16px;
+      border-radius: 0;
+      font-size: 0.75rem;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    /* Swipe Card - Elegant */
+    .swipe-card {
+      background: linear-gradient(135deg, rgba(30, 25, 45, 0.95), rgba(20, 18, 35, 0.98));
+      backdrop-filter: blur(10px);
+      border-radius: 4px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+      filter: grayscale(10%);
+    }
+
+    .card-info {
+      padding: 28px;
+    }
+
+    .card-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #d4af37;
+      margin-bottom: 12px;
+    }
+
+    .card-info .bio-text {
+      color: rgba(232, 230, 227, 0.8);
+      line-height: 1.6;
+      margin: 16px 0;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .social-links span {
+      font-size: 0.8rem;
+      color: rgba(212, 175, 55, 0.8);
+    }
+
+    .social-links i {
+      margin-right: 6px;
+    }
+
+    /* Action Buttons */
+    .action-group {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin: 24px 0 32px;
+    }
+
+    .mask-btn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+      background: rgba(212, 175, 55, 0.05);
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #d4af37;
+    }
+
+    .mask-btn:hover {
+      transform: scale(1.1);
+      background: rgba(212, 175, 55, 0.2);
+      border-color: #d4af37;
+    }
+
+    .dislike:hover {
+      color: #c44;
+      border-color: #c44;
+    }
+
+    .like:hover {
+      color: #4caf50;
+      border-color: #4caf50;
+    }
+
+    /* Matches Section */
+    .matches-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .matches-header i {
+      color: #d4af37;
+    }
+
+    .matches-scroll {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding: 16px 0;
+    }
+
+    .match-card {
+      text-align: center;
+      min-width: 80px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .match-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .match-card img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 2px solid #d4af37;
+      object-fit: cover;
+    }
+
+    .match-card p {
+      font-size: 0.7rem;
+      margin-top: 8px;
+      color: rgba(232, 230, 227, 0.7);
+    }
+
+    /* Profile Form */
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      color: #d4af37;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #e8e6e3;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: #d4af37;
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    /* Toast Notification */
+    .toast-notification {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(212, 175, 55, 0.95);
+      color: #0a0a0f;
+      padding: 12px 28px;
+      z-index: 2000;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      animation: toastFade 0.3s ease;
+    }
+
+    @keyframes toastFade {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: rgba(212, 175, 55, 0.03);
+      border: 1px dashed rgba(212, 175, 55, 0.3);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 2px solid rgba(212, 175, 55, 0.2);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
 </head>
+<body class="loading">
 
-<body>
-
-<!-- LOGIN -->
-<div id="login">
-  <h2>BMSCE Match 💋</h2>
-  <button id="loginBtn">Login with Google</button>
+<!-- MASQUERADE ENTRANCE MODAL (Stays until accepted) -->
+<div id="entranceModal" class="modal-masquerade">
+  <div class="modal-card-elegant">
+    <div class="mask-icon"><i class="fas fa-mask"></i></div>
+    <h1>THE GRAND MASQUERADE</h1>
+    <div class="subtitle">BMS COLLEGE OF ENGINEERING</div>
+    <p class="invitation-text">You are cordially invited to join the most exclusive circle at BMSce. Behind every mask lies a story waiting to be discovered.</p>
+    <ul class="rules-list">
+      <li><i class="fas fa-envelope"></i> Only @bmsce.ac.in email addresses are permitted</li>
+      <li><i class="fas fa-heart"></i> Swipe right to reveal mutual interest</li>
+      <li><i class="fas fa-bell"></i> Receive notifications when someone admires your masquerade</li>
+      <li><i class="fab fa-linkedin"></i> Import your professional persona via LinkedIn</li>
+    </ul>
+    <div class="privacy-section">
+      <i class="fas fa-shield-alt" style="color: #d4af37; margin-right: 8px;"></i>
+      <strong>THE MASQUERADE COVENANT</strong><br>
+      By entering this circle, you agree to share your name, profile image, and chosen social handles with other verified BMSce members. Your email remains veiled. Phone numbers are optional. This is a space for genuine connection—honor the masquerade.
+    </div>
+    <button id="acceptInvitationBtn" class="elegant-btn"><i class="fas fa-crown"></i> ACCEPT & ENTER</button>
+  </div>
 </div>
 
-<!-- PROFILE -->
-<div id="profile" class="hidden">
-  <h3>Create Profile</h3>
-  <input id="name" placeholder="Name"><br>
-  <input id="interests" placeholder="Interests (comma separated)"><br>
-  <input id="bio" placeholder="Bio"><br>
-  <button id="save">Save</button>
+<!-- Profile Creation Modal -->
+<div id="profileModal" class="modal-masquerade hidden">
+  <div class="modal-card-elegant">
+    <div class="mask-icon"><i class="fas fa-feather-alt"></i></div>
+    <h2>YOUR MASQUERADE IDENTITY</h2>
+    <p style="margin: 16px 0; font-size: 0.85rem;">Reveal what the circle will see</p>
+    <div class="form-group">
+      <label><i class="fas fa-user"></i> FULL NAME</label>
+      <input type="text" id="fullName" placeholder="Your name as it appears" />
+    </div>
+    <div class="form-group">
+      <label><i class="fab fa-linkedin"></i> LINKEDIN PROFILE URL</label>
+      <input type="text" id="linkedinUrl" placeholder="https://linkedin.com/in/yourprofile" />
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-quote-left"></i> MASQUERADE BIO</label>
+      <textarea id="userBio" rows="3" placeholder="Share your essence... what brings you to the masquerade?"></textarea>
+    </div>
+    <div class="form-group">
+      <label><i class="fab fa-instagram"></i> INSTAGRAM (optional)</label>
+      <input type="text" id="instagramHandle" placeholder="@username" />
+    </div>
+    <div class="form-group">
+      <label><i class="fas fa-phone"></i> PHONE (optional)</label>
+      <input type="text" id="phoneNumber" placeholder="Only if you wish to share" />
+    </div>
+    <button id="completeProfileBtn" class="elegant-btn">ENTER THE MASQUERADE</button>
+  </div>
 </div>
 
-<!-- APP -->
-<div id="app" class="hidden">
-  <div id="card"></div>
-  <button id="like">❤️</button>
-  <button id="dislike">❌</button>
-  <h3>Your Matches</h3>
-  <div id="matches"></div>
+<!-- Main App -->
+<div id="mainApp" class="container">
+  <div class="navbar">
+    <div class="logo-area">
+      <i class="fas fa-mask"></i>
+      <h2>THE MASQUERADE</h2>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div class="user-tag" id="userEmailDisplay"></div>
+      <button id="logoutBtn" class="user-tag" style="background: transparent; border: 1px solid rgba(212, 175, 55, 0.3);"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+  </div>
+
+  <div id="cardContainer">
+    <div class="empty-state">
+      <div class="spinner"></div>
+      <p>Preparing the masquerade...</p>
+    </div>
+  </div>
+
+  <div class="action-group">
+    <button id="dislikeAction" class="mask-btn dislike"><i class="fas fa-times"></i></button>
+    <button id="likeAction" class="mask-btn like"><i class="fas fa-heart"></i></button>
+  </div>
+
+  <div>
+    <div class="matches-header">
+      <i class="fas fa-handshake"></i>
+      <h3>YOUR CONNECTIONS</h3>
+      <span id="matchCounter" style="color: #d4af37;">0</span>
+    </div>
+    <div id="matchesContainer" class="matches-scroll"></div>
+  </div>
 </div>
 
 <script type="module">
+  const firebaseConfig = {
+    apiKey: "AIzaSyBqEo2MZeNUvBS8Zk4-l3Re2UcOQBb81bQ",
+    authDomain: "bms-circle.firebaseapp.com",
+    projectId: "bms-circle",
+    storageBucket: "bms-circle.firebasestorage.app",
+    messagingSenderId: "99805289899",
+    appId: "1:99805289899:web:08fcd851ba037a4c6246ee"
+  };
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc, collection, query, getDocs, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "bms-circle.firebaseapp.com",
-  projectId: "bms-circle"
-};
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore();
+  // DOM Elements
+  const entranceModal = document.getElementById('entranceModal');
+  const profileModal = document.getElementById('profileModal');
+  const mainApp = document.getElementById('mainApp');
+  const acceptBtn = document.getElementById('acceptInvitationBtn');
+  const completeProfileBtn = document.getElementById('completeProfileBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const likeAction = document.getElementById('likeAction');
+  const dislikeAction = document.getElementById('dislikeAction');
+  const userEmailDisplay = document.getElementById('userEmailDisplay');
+  const matchCounter = document.getElementById('matchCounter');
+  const matchesContainer = document.getElementById('matchesContainer');
+  const cardContainer = document.getElementById('cardContainer');
 
-const provider = new GoogleAuthProvider();
+  let currentUser = null;
+  let currentProfile = null;
+  let allProfiles = [];
+  let currentIndex = 0;
+  let likedSet = new Set();
+  let appInitialized = false;
 
-let user, profiles = [], index = 0;
-
-/* LOGIN */
-document.getElementById("loginBtn").onclick = async () => {
-  const res = await signInWithPopup(auth, provider);
-
-  if (!res.user.email.endsWith("@bmsce.ac.in")) {
-    alert("Use BMSCE email");
-    return;
-  }
-};
-
-/* AUTH */
-onAuthStateChanged(auth, async (u) => {
-  if (!u) return;
-
-  user = u;
-  document.getElementById("login").classList.add("hidden");
-
-  const docSnap = await getDoc(doc(db, "users", user.uid));
-
-  if (!docSnap.exists()) {
-    document.getElementById("profile").classList.remove("hidden");
-  } else {
-    startApp();
-  }
-});
-
-/* SAVE PROFILE */
-document.getElementById("save").onclick = async () => {
-  const name = document.getElementById("name").value;
-  const interests = document.getElementById("interests").value.split(",");
-  const bio = document.getElementById("bio").value;
-
-  await setDoc(doc(db, "users", user.uid), {
-    name,
-    interests,
-    bio,
-    likes: [],
-    matches: []
-  });
-
-  document.getElementById("profile").classList.add("hidden");
-  startApp();
-};
-
-/* START APP */
-async function startApp() {
-  document.getElementById("app").classList.remove("hidden");
-
-  const snap = await getDocs(collection(db, "users"));
-  profiles = [];
-
-  snap.forEach(d => {
-    if (d.id !== user.uid) profiles.push({ id: d.id, ...d.data() });
-  });
-
-  sortProfiles();
-  showCard();
-  loadMatches();
-}
-
-/* INTEREST MATCHING */
-function sortProfiles() {
-  profiles.sort((a, b) => {
-    const scoreA = common(a.interests);
-    const scoreB = common(b.interests);
-    return scoreB - scoreA + Math.random();
-  });
-}
-
-function common(interests) {
-  const my = document.getElementById("interests").value.split(",");
-  return interests.filter(i => my.includes(i)).length;
-}
-
-/* CARD */
-function showCard() {
-  if (index >= profiles.length) {
-    document.getElementById("card").innerHTML = "No more people 😭";
-    return;
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `<i class="fas fa-mask"></i> ${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 2500);
   }
 
-  const p = profiles[index];
+  function renderCard(profile) {
+    if (!profile) return '';
+    const imgUrl = profile.photoURL || `https://ui-avatars.com/api/?background=8B7355&color=F5DEB3&bold=true&size=300&name=${encodeURIComponent(profile.displayName || 'Guest')}`;
+    return `
+      <div class="swipe-card">
+        <img class="card-img" src="${imgUrl}" onerror="this.src='https://ui-avatars.com/api/?background=8B7355&color=F5DEB3&size=300&name=${encodeURIComponent(profile.displayName || 'Guest')}'">
+        <div class="card-info">
+          <h3>${escapeHtml(profile.displayName || 'Masquerade Guest')}</h3>
+          <div class="bio-text">${escapeHtml(profile.bio || 'A mysterious presence at the masquerade.')}</div>
+          <div class="social-links">
+            ${profile.instagram ? `<span><i class="fab fa-instagram"></i> ${escapeHtml(profile.instagram)}</span>` : ''}
+            ${profile.phone ? `<span><i class="fas fa-phone-alt"></i> ${escapeHtml(profile.phone)}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }
 
-  document.getElementById("card").innerHTML = `
-    <div class="card">
-      <h3>${p.name}</h3>
-      <p>${p.bio}</p>
-      <p><b>Interests:</b> ${p.interests.join(", ")}</p>
-    </div>
-  `;
-}
+  async function loadNextCard() {
+    while (currentIndex < allProfiles.length && likedSet.has(allProfiles[currentIndex]?.uid)) {
+      currentIndex++;
+    }
+    
+    if (currentIndex >= allProfiles.length) {
+      cardContainer.innerHTML = `<div class="empty-state"><i class="fas fa-glass-cheers fa-3x" style="color: #d4af37;"></i><p style="margin-top: 20px;">The masquerade awaits new guests. Check back soon!</p></div>`;
+      return;
+    }
+    
+    cardContainer.innerHTML = renderCard(allProfiles[currentIndex]);
+  }
 
-/* LIKE */
-document.getElementById("like").onclick = async () => {
-  const target = profiles[index];
+  async function handleLike() {
+    if (currentIndex >= allProfiles.length) return;
+    const likedUser = allProfiles[currentIndex];
+    
+    if (!likedSet.has(likedUser.uid)) {
+      const likesRef = doc(db, "likes", currentUser.uid);
+      await setDoc(likesRef, { likedProfiles: arrayUnion(likedUser.uid) }, { merge: true });
+      
+      const notifRef = doc(db, "notifications", likedUser.uid);
+      await setDoc(notifRef, {
+        notifications: arrayUnion({
+          fromUid: currentUser.uid,
+          fromName: currentProfile?.displayName || currentUser.email,
+          timestamp: new Date().toISOString(),
+          read: false
+        })
+      }, { merge: true });
+      
+      likedSet.add(likedUser.uid);
+      showToast(`You've shown interest in ${likedUser.displayName || 'a fellow guest'}`);
+      
+      const theirLikes = await getDoc(doc(db, "likes", likedUser.uid));
+      if (theirLikes.exists() && theirLikes.data().likedProfiles?.includes(currentUser.uid)) {
+        showToast(`✨ A CONNECTION IS FORMED! You and ${likedUser.displayName} share mutual interest ✨`);
+        const matchRef = doc(db, "matches", currentUser.uid);
+        await setDoc(matchRef, { matches: arrayUnion(likedUser.uid) }, { merge: true });
+        const targetMatchRef = doc(db, "matches", likedUser.uid);
+        await setDoc(targetMatchRef, { matches: arrayUnion(currentUser.uid) }, { merge: true });
+        await loadMatches();
+      }
+    }
+    
+    currentIndex++;
+    await loadNextCard();
+  }
 
-  const myRef = doc(db, "users", user.uid);
-  await updateDoc(myRef, {
-    likes: arrayUnion(target.id)
-  });
+  async function handleDislike() {
+    if (currentIndex >= allProfiles.length) return;
+    currentIndex++;
+    await loadNextCard();
+  }
 
-  const targetDoc = await getDoc(doc(db, "users", target.id));
+  async function loadMatches() {
+    const matchRef = doc(db, "matches", currentUser.uid);
+    const matchSnap = await getDoc(matchRef);
+    const matchIds = matchSnap.exists() ? matchSnap.data().matches || [] : [];
+    matchCounter.innerText = matchIds.length;
+    
+    matchesContainer.innerHTML = '';
+    for (const id of matchIds) {
+      const profileSnap = await getDoc(doc(db, "profiles", id));
+      if (profileSnap.exists()) {
+        const p = profileSnap.data();
+        const div = document.createElement('div');
+        div.className = 'match-card';
+        div.onclick = () => showToast(`${p.displayName}: ${p.bio || 'A mysterious presence'}`);
+        div.innerHTML = `
+          <img src="${p.photoURL || `https://ui-avatars.com/api/?background=8B7355&color=F5DEB3&size=70&name=${encodeURIComponent(p.displayName || '')}`}" alt="${p.displayName}">
+          <p>${escapeHtml(p.displayName?.split(' ')[0] || 'Guest')}</p>
+        `;
+        matchesContainer.appendChild(div);
+      }
+    }
+  }
 
-  if (targetDoc.data().likes.includes(user.uid)) {
-    alert("💘 MATCH!");
-
-    await updateDoc(myRef, {
-      matches: arrayUnion(target.id)
+  async function fetchAllProfiles() {
+    const q = query(collection(db, "profiles"));
+    const snap = await getDocs(q);
+    allProfiles = [];
+    snap.forEach(doc => {
+      if (doc.id !== currentUser.uid) {
+        allProfiles.push({ uid: doc.id, ...doc.data() });
+      }
     });
+    allProfiles = allProfiles.sort(() => Math.random() - 0.5);
+    currentIndex = 0;
+    
+    const likesSnap = await getDoc(doc(db, "likes", currentUser.uid));
+    if (likesSnap.exists() && likesSnap.data().likedProfiles) {
+      likedSet = new Set(likesSnap.data().likedProfiles);
+    }
+    
+    await loadNextCard();
+  }
 
-    await updateDoc(doc(db, "users", target.id), {
-      matches: arrayUnion(user.uid)
+  async function saveProfile() {
+    const name = document.getElementById('fullName').value.trim();
+    if (!name) {
+      showToast('Please reveal your name to enter the masquerade');
+      return;
+    }
+    
+    const profileData = {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      displayName: name,
+      bio: document.getElementById('userBio').value.trim() || "A guest at the grand masquerade.",
+      instagram: document.getElementById('instagramHandle').value.trim(),
+      phone: document.getElementById('phoneNumber').value.trim(),
+      photoURL: `https://ui-avatars.com/api/?background=8B7355&color=F5DEB3&bold=true&size=300&name=${encodeURIComponent(name)}`,
+      updatedAt: new Date().toISOString()
+    };
+    
+    await setDoc(doc(db, "profiles", currentUser.uid), profileData);
+    currentProfile = profileData;
+    profileModal.classList.add('hidden');
+    mainApp.classList.remove('hidden');
+    await fetchAllProfiles();
+    await loadMatches();
+    showToast('Welcome to the masquerade. May you find meaningful connections.');
+  }
+
+  async function checkProfileExists() {
+    const profileDoc = await getDoc(doc(db, "profiles", currentUser.uid));
+    if (!profileDoc.exists()) {
+      profileModal.classList.remove('hidden');
+    } else {
+      currentProfile = profileDoc.data();
+      mainApp.classList.remove('hidden');
+      await fetchAllProfiles();
+      await loadMatches();
+    }
+  }
+
+  async function initiateLogin() {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email;
+      
+      if (!email.endsWith('@bmsce.ac.in')) {
+        await signOut(auth);
+        showToast('Only @bmsce.ac.in email addresses are permitted at this masquerade.');
+        return;
+      }
+      
+      currentUser = result.user;
+      userEmailDisplay.innerHTML = `<i class="fas fa-envelope"></i> ${email.split('@')[0]}`;
+      entranceModal.classList.add('hidden');
+      await checkProfileExists();
+    } catch (error) {
+      console.error(error);
+      showToast('The masquerade gates are having trouble. Please try again.');
+    }
+  }
+
+  async function handleLogout() {
+    await signOut(auth);
+    currentUser = null;
+    mainApp.classList.add('hidden');
+    profileModal.classList.add('hidden');
+    entranceModal.classList.remove('hidden');
+    showToast('You have left the masquerade. Until we meet again.');
+  }
+
+  // FIXED: Auth state handler with appInitialized flag and loading removal
+  onAuthStateChanged(auth, async (user) => {
+    if (appInitialized) return;
+    appInitialized = true;
+
+    if (user && user.email?.endsWith('@bmsce.ac.in')) {
+      currentUser = user;
+      userEmailDisplay.innerHTML = `<i class="fas fa-envelope"></i> ${user.email.split('@')[0]}`;
+      entranceModal.classList.add('hidden');
+      await checkProfileExists();
+    } else {
+      // Not logged in → KEEP modal visible
+      entranceModal.classList.remove('hidden');
+      mainApp.classList.add('hidden');
+      profileModal.classList.add('hidden');
+    }
+    
+    // Remove loading class after auth is resolved
+    document.body.classList.remove('loading');
+  });
+
+  // Event Listeners
+  acceptBtn.addEventListener('click', initiateLogin);
+  completeProfileBtn.addEventListener('click', saveProfile);
+  logoutBtn.addEventListener('click', handleLogout);
+  likeAction.addEventListener('click', handleLike);
+  dislikeAction.addEventListener('click', handleDislike);
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
     });
-
-    loadMatches();
   }
 
-  index++;
-  showCard();
-};
-
-/* DISLIKE */
-document.getElementById("dislike").onclick = () => {
-  index++;
-  showCard();
-};
-
-/* LOAD MATCHES */
-async function loadMatches() {
-  const docSnap = await getDoc(doc(db, "users", user.uid));
-  const matches = docSnap.data().matches || [];
-
-  let html = "";
-
-  for (let id of matches) {
-    const m = await getDoc(doc(db, "users", id));
-    html += `<p>💘 ${m.data().name}</p>`;
+  // Elegant masquerade mask particles
+  const maskSymbols = ['🎭', '👑', '🪶', '⚜️', '🏛️', '📜', '🔱'];
+  for (let i = 0; i < 25; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'masquerade-particle';
+    particle.innerHTML = maskSymbols[Math.floor(Math.random() * maskSymbols.length)];
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 20 + 's';
+    particle.style.animationDuration = 15 + Math.random() * 20 + 's';
+    particle.style.fontSize = 1 + Math.random() * 1.5 + 'rem';
+    document.body.appendChild(particle);
   }
-
-  document.getElementById("matches").innerHTML = html;
-}
-
 </script>
 </body>
 </html>
